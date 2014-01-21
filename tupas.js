@@ -17,8 +17,8 @@ exports.initialize = function (vendorId, appHandler, hostUrl, baseUrl, callback)
 
   appHandler.get("/form", form(vendorId, "FI", returnUrls));
   appHandler.post(baseUrl + okPath, ok(callback));
-  appHandler.post(baseUrl + cancelPath, cancel(callback));
-  appHandler.post(baseUrl + rejectPath, reject(callback));
+  appHandler.get(baseUrl + cancelPath, cancel(callback));
+  appHandler.get(baseUrl + rejectPath, reject(callback));
 }
 
 function form(vendorId, languageCode, returnUrls) {
