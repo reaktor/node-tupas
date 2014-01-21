@@ -1,5 +1,6 @@
 var crypto = require ("crypto");
 var request = require("superagent");
+var jade = require("jade");
 var cancelPath = "/cancel";
 var okPath = "/ok";
 var rejectPath = "/reject";
@@ -12,6 +13,7 @@ exports.initialize = function (vendorId, appHandler, hostUrl, baseUrl, callback)
       reject : hostUrl + baseUrl + rejectPath
   }
 
+  appHandler.get("/form", form(vendorId, "FI", returnUrls));
   appHandler.get(baseUrl, bankSelection);
   appHandler.post(baseUrl + '/select/:bankId', makeTupasRequest(vendorId, "FI", returnUrls))
   appHandler.post(baseUrl + okPath, ok(callback));
@@ -36,13 +38,38 @@ function bankSelectionHTML() {
         "</body></html>";
 }
 
+function form(vendorId, languageCode, returnUrls) {
+   return function(req, res) {
+       var params = {
+           bankAuthUrl : "https://verkkopankki.sampopankki.fi/SP/tupaha/TupahaApp",
+           messageType : "701",
+           version : "0003",
+           vendorId : vendorId,
+           languageCode : languageCode,
+           identifier : new Date().toDateString() + "VAIHDA-GENEROITU-ID-TAHAN",
+           idType : "01",
+           returnLink : returnUrls.ok,
+           cancelLink : returnUrls.cancel,
+           rejectLink : returnUrls.reject,
+           keyVersion : "001",
+           algorithmType : "03",
+           checksumKey: "xxxxxxxxxxxxxxxxx"
+       }
+
+       var html = jade.renderFile('./views/form.jade', params);
+       res.send(html);
+
+   }
+
+}
+
 function makeTupasRequest(vendorId, languageCode, returnUrls) {
   return function (req, res) {
 
       var prefix = "A01Y_";
       var params = {
           messageType : "701",
-          version : "000",
+          version : "0003",
           vendorId : vendorId,
           languageCode : languageCode,
           identifier : new Date().toDateString() + "VAIHDA-GENEROITU-ID-TAHAN",
