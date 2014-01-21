@@ -1,6 +1,7 @@
 var crypto = require ("crypto");
 var request = require("superagent");
 var jade = require("jade");
+var moment = require("moment");
 var config = require('./config.json');
 var cancelPath = "/cancel";
 var okPath = "/ok";
@@ -22,14 +23,14 @@ exports.initialize = function (vendorId, appHandler, hostUrl, baseUrl, callback)
 
 function form(vendorId, languageCode, returnUrls) {
    return function(req, res) {
-
+       var now = moment().format('YYYYMMDDhhmmss');
        var bankParams = config.banks.map(function(bank) {
         return {
             bankAuthUrl : bank.authUrl,
             messageType : "701",
             version : bank.version,
             vendorId : vendorId,
-            identifier : new Date().toDateString() + "12345",
+            identifier : now + "123456",
             languageCode : languageCode,
             idType : bank.idType,
             returnLink : returnUrls.ok,

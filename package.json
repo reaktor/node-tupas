@@ -11,7 +11,8 @@
   "dependencies": {
     "express": "3.4.8",
     "superagent": "0.16.0",
-    "jade": "1.1.5"
+    "jade": "1.1.5",
+    "moment" : "2.5.0"
 
   }
 }
