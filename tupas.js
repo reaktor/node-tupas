@@ -46,12 +46,12 @@ function form(vendorId, languageCode, returnUrls) {
            version : "0003",
            vendorId : vendorId,
            languageCode : languageCode,
-           identifier : new Date().toDateString() + "VAIHDA-GENEROITU-ID-TAHAN",
+           identifier : new Date().toDateString() + "12345",
            idType : "01",
            returnLink : returnUrls.ok,
            cancelLink : returnUrls.cancel,
            rejectLink : returnUrls.reject,
-           keyVersion : "001",
+           keyVersion : "0001",
            algorithmType : "03",
            checksumKey: "xxxxxxxxxxxxxxxxx"
        }
