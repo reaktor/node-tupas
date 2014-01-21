@@ -5,6 +5,7 @@ var crypto = require("crypto")
   , events = require('events')
   , fs = require('fs')
   , _ = require('underscore')._
+  , express = require('express')
   , config = require('./config.json');
 
 var tupasPath = "/tupas"
@@ -27,6 +28,7 @@ tupas.initialize = function (appHandler, hostUrl, callback) {
   }
 
   initializeReturnUrls(appHandler, vendorOpts.returnUrls);
+  appHandler.use(express.static(__dirname + '/public'))
 }
 
 function initializeReturnUrls (handler, returnUrls) {
@@ -46,6 +48,8 @@ tupas.paramsForBank = function (bankId, languageCode, vendorId, checksumKey) {
   var bank = tupas.bankConfig(bankId);
   var now = moment().format('YYYYMMDDhhmmss');
   var params = {
+    name : bank.name,
+    id : bank.id,
     bankAuthUrl: bank.authUrl,
     messageType: "701",
     version: bank.version,
@@ -58,7 +62,8 @@ tupas.paramsForBank = function (bankId, languageCode, vendorId, checksumKey) {
     rejectLink: vendorOpts.returnUrls.reject,
     keyVersion: bank.keyVersion,
     algorithmType: "03",
-    checksumKey: checksumKey
+    checksumKey: checksumKey,
+    imgPath : bank.imgPath
   }
 
   var mac = tupas.generateMAC(params);

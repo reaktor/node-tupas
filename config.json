@@ -6,7 +6,8 @@
         "authUrl" : "https://pankki.tapiola.fi/service/identify",
         "version" : "0002",
         "keyVersion" : "0001",
-        "idType" : "01"
+        "idType" : "01",
+        "imgPath" : "images/logo_tapiola.gif"
       },
 
       {
@@ -15,7 +16,8 @@
         "authUrl" : "https://verkkopankki.sampopankki.fi/SP/tupaha/TupahaApp",
         "version" : "0003",
         "keyVersion" : "0001",
-        "idType" : "01"
+        "idType" : "01",
+        "imgPath" : "https://www.danskebank.fi/verkkopalvelu/logo.gif"
       },
 
       {
@@ -24,7 +26,8 @@
         "authUrl" : "https://tunnistepalvelu.samlink.fi/TupasTunnistus/SHBtupas.html",
         "version" : "0002",
         "keyVersion" : "0001",
-        "idType" : "01"
+        "idType" : "01",
+        "imgPath" : "images/logo_handelsbanken.gif"
       },
 
       {
@@ -33,7 +36,8 @@
         "authUrl" : "https://solo3.nordea.fi/cgi-bin/SOLO3011",
         "version" : "0002",
         "keyVersion" : "0001",
-        "idType" : "01"
+        "idType" : "01",
+        "imgPath" : "images/logo_nordea.gif"
       },
 
       {
@@ -42,7 +46,8 @@
         "authUrl" : "https://kultaraha.op.fi/cgi-bin/krcgi",
         "version" : "0003",
         "keyVersion" : "0001",
-        "idType" : "02"
+        "idType" : "02",
+        "imgPath" : "images/logo_op.jpg"
       },
 
       {
@@ -51,7 +56,8 @@
         "authUrl" : "https://tunnistepalvelu.samlink.fi/TupasTunnistus/TupasServlet",
         "version" : "0002",
         "keyVersion" : "0001",
-        "idType" : "01"
+        "idType" : "01",
+        "imgPath" : "images/logo_sppop.gif"
       },
 
       {
@@ -60,7 +66,8 @@
         "authUrl" : "https://online.alandsbanken.fi/service/identify",
         "version" : "0002",
         "keyVersion" : "0001",
-        "idType" : "01"
+        "idType" : "01",
+        "imgPath" : "images/logo_alandsbanken.gif"
       },
 
       {
@@ -69,7 +76,8 @@
         "authUrl" : "https://online.s-pankki.fi/service/identify",
         "version" : "0002",
         "keyVersion" : "0001",
-        "idType" : "01"
+        "idType" : "01",
+        "imgPath" : "images/logo_s_pankki.gif"
       }
 
     ]
