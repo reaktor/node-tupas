@@ -12,7 +12,49 @@
             "version" : "0003",
             "keyVersion" : "0001",
             "idType" : "01"
-        }
+        },
+
+        { "name" : "Handelsbanken",
+          "authUrl" : "https://tunnistepalvelu.samlink.fi/TupasTunnistus/SHBtupas.html",
+          "version" : "0002",
+          "keyVersion" : "0001",
+          "idType" : "01"
+        },
+
+      { "name" : "Nordea",
+        "authUrl" : "https://solo3.nordea.fi/cgi-bin/SOLO3011",
+        "version" : "0002",
+        "keyVersion" : "0001",
+        "idType" : "01"
+      },
+
+      { "name" : "Osuuspankkiryhmä",
+        "authUrl" : "https://kultaraha.op.fi/cgi-bin/krcgi",
+        "version" : "0003",
+        "keyVersion" : "0001",
+        "idType" : "02"
+      },
+
+      { "name" : "Aktia",
+        "authUrl" : "https://tunnistepalvelu.samlink.fi/TupasTunnistus/TupasServlet",
+        "version" : "0002",
+        "keyVersion" : "0001",
+        "idType" : "01"
+      },
+
+      { "name" : "Ålandsbanken",
+        "authUrl" : "https://online.alandsbanken.fi/service/identify",
+        "version" : "0002",
+        "keyVersion" : "0001",
+        "idType" : "01"
+      },
+
+      { "name" : "S-Pankki",
+        "authUrl" : "https://online.s-pankki.fi/service/identify",
+        "version" : "0002",
+        "keyVersion" : "0001",
+        "idType" : "01"
+      }
 
     ]
 }
