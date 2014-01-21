@@ -1,0 +1,18 @@
+{
+    "banks" : [
+        { "name" : "Tapiola",
+          "authUrl" : "https://pankki.tapiola.fi/service/identify",
+          "version" : "0002",
+          "keyVersion" : "0001",
+          "idType" : "01"
+        },
+
+        { "name" : "DanskeBank",
+            "authUrl" : "https://verkkopankki.sampopankki.fi/SP/tupaha/TupahaApp",
+            "version" : "0003",
+            "keyVersion" : "0001",
+            "idType" : "01"
+        }
+
+    ]
+}

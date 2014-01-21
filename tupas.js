@@ -1,6 +1,7 @@
 var crypto = require ("crypto");
 var request = require("superagent");
 var jade = require("jade");
+var config = require('./config.json');
 var cancelPath = "/cancel";
 var okPath = "/ok";
 var rejectPath = "/reject";
@@ -15,14 +16,14 @@ exports.initialize = function (vendorId, appHandler, hostUrl, baseUrl, callback)
 
   appHandler.get("/form", form(vendorId, "FI", returnUrls));
   appHandler.get(baseUrl, bankSelection);
-  appHandler.post(baseUrl + '/select/:bankId', makeTupasRequest(vendorId, "FI", returnUrls))
+  appHandler.get(baseUrl + '/select/:bankId', makeTupasRequest(vendorId, "FI", returnUrls))
   appHandler.post(baseUrl + okPath, ok(callback));
   appHandler.post(baseUrl + cancelPath, cancel(callback));
   appHandler.post(baseUrl + rejectPath, reject(callback));
 }
 
 function bankSelection(req, res) {
-  res.send(bankSelectionHTML())
+  return res.send(bankSelectionHTML())
 }
 
 function bankSelectionHTML() {
@@ -40,23 +41,27 @@ function bankSelectionHTML() {
 
 function form(vendorId, languageCode, returnUrls) {
    return function(req, res) {
-       var params = {
-           bankAuthUrl : "https://verkkopankki.sampopankki.fi/SP/tupaha/TupahaApp",
-           messageType : "701",
-           version : "0003",
-           vendorId : vendorId,
-           languageCode : languageCode,
-           identifier : new Date().toDateString() + "12345",
-           idType : "01",
-           returnLink : returnUrls.ok,
-           cancelLink : returnUrls.cancel,
-           rejectLink : returnUrls.reject,
-           keyVersion : "0001",
-           algorithmType : "03",
-           checksumKey: "xxxxxxxxxxxxxxxxx"
-       }
 
-       var html = jade.renderFile('./views/form.jade', params);
+       var bankParams = config.banks.map(function(bank) {
+        return {
+            bankAuthUrl : bank.authUrl,
+            messageType : "701",
+            version : bank.version,
+            vendorId : vendorId,
+            identifier : new Date().toDateString() + "12345",
+            languageCode : languageCode,
+            idType : bank.idType,
+            returnLink : returnUrls.ok,
+            cancelLink : returnUrls.cancel,
+            rejectLink : returnUrls.reject,
+            keyVersion : bank.keyVersion,
+            algorithmType : "03",
+            checksumKey: "xxxxxxxxxxxxxxxxx"
+
+           }
+       });
+
+       var html = jade.renderFile('./views/form.jade', {banks : bankParams});
        res.send(html);
 
    }
@@ -79,10 +84,10 @@ function makeTupasRequest(vendorId, languageCode, returnUrls) {
           rejectLink : returnUrls.reject,
           keyVersion : "001",
           algorithmType : "03",
-          checksumKey: "xxxxxxxxxxxxxxx"
+          checksumKey: " pAwfvWTD7g9etWGNTVR5zCj5EhHt5yuHdLrxQH2BD5gZxk7xBUrfqubtYv8vZvs4"
       }
 
-      request.post('/user')
+      request.post("https://tunnistepalvelu.samlink.fi/TupasTunnistus/SHBtupas.html")
           .send(prefix + "ACTION_ID = " + params.messageType)
           .send(prefix + "VERS = " + params.version)
           .send(prefix + "RCVID = " + params.vendorId)
