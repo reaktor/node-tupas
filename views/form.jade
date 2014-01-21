@@ -11,5 +11,5 @@ each bank in banks
       input(name='A01Y_REJLINK', type='hidden', value='#{bank.rejectLink}')
       input(name='A01Y_KEYVERS', type='hidden', value='#{bank.keyVersion}')
       input(name='A01Y_ALG', type='hidden', value='#{bank.algorithmType}')
-      input(name='A01Y_MAC', type='hidden', value='#{bank.checksumKey}')
+      input(name='A01Y_MAC', type='hidden', value='#{bank.mac}')
       input(value='Submit', type='submit')

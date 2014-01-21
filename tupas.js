@@ -25,7 +25,7 @@ function form(vendorId, languageCode, returnUrls) {
    return function(req, res) {
        var now = moment().format('YYYYMMDDhhmmss');
        var bankParams = config.banks.map(function(bank) {
-        return {
+         var params = {
             bankAuthUrl : bank.authUrl,
             messageType : "701",
             version : bank.version,
@@ -39,8 +39,10 @@ function form(vendorId, languageCode, returnUrls) {
             keyVersion : bank.keyVersion,
             algorithmType : "03",
             checksumKey: "xxxxxxxxxxxxxxxxx"
-
-           }
+          }
+          var mac = generateMAC(params);
+          params.mac = mac;
+          return params;
        });
 
        var html = jade.renderFile('./views/form.jade', {banks : bankParams});
