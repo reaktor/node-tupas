@@ -1,56 +1,80 @@
-var crypto = require("crypto");
-var request = require("superagent");
-var jade = require("jade");
-var moment = require("moment");
-var config = require('./config.json');
-var cancelPath = "/cancel";
-var okPath = "/ok";
-var rejectPath = "/reject";
+var crypto = require("crypto")
+  , request = require("superagent")
+  , jade = require("jade")
+  , moment = require("moment")
+  , events = require('events')
+  , fs = require('fs')
+  , _ = require('underscore')._
+  , config = require('./config.json');
 
-exports.initialize = function (vendorId, appHandler, hostUrl, baseUrl, callback) {
+var tupasPath = "/tupas"
+  , cancelPath = tupasPath + "/cancel"
+  , okPath = tupasPath + "/ok"
+  , rejectPath = tupasPath + "/reject";
 
-  var returnUrls = {
-    ok: hostUrl + baseUrl + okPath,
-    cancel: hostUrl + baseUrl + cancelPath,
-    reject: hostUrl + baseUrl + rejectPath
+var tupas = Object.create(events.EventEmitter.prototype),
+    vendorOpts = {},
+    banks = config.banks;
+
+tupas.initialize = function (appHandler, hostUrl, callback) {
+  vendorOpts.appHandler = appHandler;
+  vendorOpts.hostUrl = hostUrl;
+  vendorOpts.callback = callback;
+  vendorOpts.returnUrls = {
+    ok: hostUrl + okPath,
+    cancel: hostUrl + cancelPath,
+    reject: hostUrl + rejectPath
   }
 
-  appHandler.get("/form", form(vendorId, "FI", returnUrls));
-  appHandler.post(baseUrl + okPath, ok(callback));
-  appHandler.get(baseUrl + cancelPath, cancel(callback));
-  appHandler.get(baseUrl + rejectPath, reject(callback));
+  initializeReturnUrls(appHandler, vendorOpts.returnUrls);
 }
 
-function form(vendorId, languageCode, returnUrls) {
-  return function (req, res) {
-    var now = moment().format('YYYYMMDDhhmmss');
-    var bankParams = config.banks.map(function (bank) {
-      var params = {
-        bankAuthUrl: bank.authUrl,
-        messageType: "701",
-        version: bank.version,
-        vendorId: vendorId,
-        identifier: now + "123456",
-        languageCode: languageCode,
-        idType: bank.idType,
-        returnLink: returnUrls.ok,
-        cancelLink: returnUrls.cancel,
-        rejectLink: returnUrls.reject,
-        keyVersion: bank.keyVersion,
-        algorithmType: "03",
-        checksumKey: "xxxxxxxxxxxxxxxxx"
-      }
-      var mac = generateMAC(params);
-      params.mac = mac;
-      return params;
-    });
+function initializeReturnUrls (handler, returnUrls) {
+  handler.post(returnUrls.ok, ok);
+  handler.get(returnUrls.cancel, cancel);
+  handler.get(returnUrls.reject, reject);
+}
 
-    var html = jade.renderFile('./views/form.jade', {banks: bankParams});
-    res.send(html);
+tupas.tupasForm = function (bankId, languageCode, checksumKey) {
+  var html = jade.renderFile('./views/form.jade', {
+    bank: tupas.paramsForBank(bankId, languageCode, checksumKey)
+  });
+  return html;
+}
+
+tupas.paramsForBank = function (bankId, languageCode, vendorId, checksumKey) {
+  var bank = tupas.bankConfig(bankId);
+  var now = moment().format('YYYYMMDDhhmmss');
+  var params = {
+    bankAuthUrl: bank.authUrl,
+    messageType: "701",
+    version: bank.version,
+    vendorId: vendorId,
+    identifier: now + "123456",
+    languageCode: languageCode,
+    idType: bank.idType,
+    returnLink: vendorOpts.returnUrls.ok,
+    cancelLink: vendorOpts.returnUrls.cancel,
+    rejectLink: vendorOpts.returnUrls.reject,
+    keyVersion: bank.keyVersion,
+    algorithmType: "03",
+    checksumKey: checksumKey
   }
+
+  var mac = tupas.generateMAC(params);
+  params.mac = mac;
+
+  return params;
 }
 
-function generateMAC(p) {
+tupas.bankConfig = function (bankId) {
+  var bankConfig = _.find(banks, function (bank) {
+    return bank.id == bankId;
+  });
+  return bankConfig;
+}
+
+tupas.generateMAC = function (p) {
   var macParams = [
     p.messageType,
     p.version,
@@ -69,20 +93,16 @@ function generateMAC(p) {
   return crypto.createHash('sha256').update(joinedParams).digest('hex');
 }
 
-function ok(callback) {
-  return function (req, res) {
-    callback('OK', req.query)
-  }
+function ok(req, res) {
+  vendorOpts.callback('OK', req.query)
 }
 
-function cancel(callback) {
-  return function (req, res) {
-    callback('CANCEL', req.query)
-  }
+function cancel(req, res) {
+  vendorOpts.callback('CANCEL', req.query)
 }
 
-function reject(callback) {
-  return function (req, res) {
-    callback('REJECT', req.query)
-  }
+function reject(req, res) {
+  vendorOpts.callback('REJECT', req.query)
 }
+
+module.exports = tupas

@@ -1,55 +1,71 @@
 {
     "banks" : [
-        { "name" : "Tapiola",
-          "authUrl" : "https://pankki.tapiola.fi/service/identify",
-          "version" : "0002",
-          "keyVersion" : "0001",
-          "idType" : "01"
-        },
+      {
+        "id" : "tapiola",
+        "name" : "Tapiola",
+        "authUrl" : "https://pankki.tapiola.fi/service/identify",
+        "version" : "0002",
+        "keyVersion" : "0001",
+        "idType" : "01"
+      },
 
-        { "name" : "DanskeBank",
-            "authUrl" : "https://verkkopankki.sampopankki.fi/SP/tupaha/TupahaApp",
-            "version" : "0003",
-            "keyVersion" : "0001",
-            "idType" : "01"
-        },
+      {
+        "id" : "danskebank",
+        "name" : "DanskeBank",
+        "authUrl" : "https://verkkopankki.sampopankki.fi/SP/tupaha/TupahaApp",
+        "version" : "0003",
+        "keyVersion" : "0001",
+        "idType" : "01"
+      },
 
-        { "name" : "Handelsbanken",
-          "authUrl" : "https://tunnistepalvelu.samlink.fi/TupasTunnistus/SHBtupas.html",
-          "version" : "0002",
-          "keyVersion" : "0001",
-          "idType" : "01"
-        },
+      {
+        "id" : "handelsbanken",
+        "name" : "Handelsbanken",
+        "authUrl" : "https://tunnistepalvelu.samlink.fi/TupasTunnistus/SHBtupas.html",
+        "version" : "0002",
+        "keyVersion" : "0001",
+        "idType" : "01"
+      },
 
-      { "name" : "Nordea",
+      {
+        "id" : "nordea",
+        "name" : "Nordea",
         "authUrl" : "https://solo3.nordea.fi/cgi-bin/SOLO3011",
         "version" : "0002",
         "keyVersion" : "0001",
         "idType" : "01"
       },
 
-      { "name" : "Osuuspankkiryhmä",
+      {
+        "id" : "op",
+        "name" : "Osuuspankkiryhmä",
         "authUrl" : "https://kultaraha.op.fi/cgi-bin/krcgi",
         "version" : "0003",
         "keyVersion" : "0001",
         "idType" : "02"
       },
 
-      { "name" : "Aktia",
+      {
+        "id" : "aktia",
+        "name" : "Aktia",
         "authUrl" : "https://tunnistepalvelu.samlink.fi/TupasTunnistus/TupasServlet",
         "version" : "0002",
         "keyVersion" : "0001",
         "idType" : "01"
       },
 
-      { "name" : "Ålandsbanken",
+      {
+        "id" : "alandsbanken",
+        "name" : "Ålandsbanken",
         "authUrl" : "https://online.alandsbanken.fi/service/identify",
         "version" : "0002",
         "keyVersion" : "0001",
         "idType" : "01"
       },
 
-      { "name" : "S-Pankki",
+      {
+        "id" : "spankki",
+        "name" : "S-Pankki",
         "authUrl" : "https://online.s-pankki.fi/service/identify",
         "version" : "0002",
         "keyVersion" : "0001",
