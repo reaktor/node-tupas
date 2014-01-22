@@ -29,6 +29,21 @@ var bankOpts = [
 
 var tupas = require('./tupas').create(globalOpts, bankOpts);
 
+tupas.on('success', function (data, res) {
+  console.log(data);
+  res.send(data);
+});
+
+tupas.on('cancel', function (res) {
+  console.log("Cancelled");
+  res.send("Tupas identification was cancelled.")
+});
+
+tupas.on('reject', function (res) {
+  console.log("Rejected.");
+  res.send("Identification failed.")
+});
+
 function handler(tupasStatus, responseData) {
   console.log(tupasStatus);
   console.log(responseData);

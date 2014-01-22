@@ -19,7 +19,7 @@ exports.create = function (globalOpts, bankOpts) {
   var vendorOpts = _.extend({}, globalOpts,
     { returnUrls : returnUrls(globalOpts.hostUrl) });
 
-  initializeReturnUrls(vendorOpts.appHandler, vendorOpts);
+  initializeReturnUrls(tupas, vendorOpts);
   vendorOpts.appHandler.use(express.static(__dirname + '/public'));
 
   tupas.banks = _.pluck(banks, 'id');
@@ -70,10 +70,11 @@ function mergeWithDefaults (bankOpts) {
   });
 }
 
-function initializeReturnUrls (handler, vendorOpts) {
-  handler.post(vendorOpts.returnUrls.ok, ok(vendorOpts.callback));
-  handler.get(vendorOpts.returnUrls.cancel, cancel(vendorOpts.callback));
-  handler.get(vendorOpts.returnUrls.reject, reject(vendorOpts.callback));
+function initializeReturnUrls (eventEmitter, vendorOpts) {
+  var handler = vendorOpts.appHandler;
+  handler.post(okPath, ok(eventEmitter));
+  handler.get(cancelPath, cancel(eventEmitter));
+  handler.get(rejectPath, reject(eventEmitter));
 }
 
 function buildParamsForRequest (bank, languageCode, returnUrls) {
@@ -128,20 +129,20 @@ function generateMacForRequest (requestParams) {
   return crypto.createHash('sha256').update(joinedParams).digest('hex');
 }
 
-function ok(callback) {
+function ok (eventEmitter) {
   return function (req, res) {
-    callback('OK', req.query)
+    eventEmitter.emit('success', req.query, res);
   }
 }
 
-function cancel(callback) {
+function cancel (eventEmitter) {
   return function (req, res) {
-    callback('CANCEL', req.query);
+    eventEmitter.emit('cancel', res);
   }
 }
 
-function reject(callback) {
+function reject (eventEmitter) {
   return function (req, res) {
-    callback('REJECT', req.query);
+    eventEmitter.emit('reject', res);
   }
 }
