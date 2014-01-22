@@ -1,7 +1,6 @@
 var express = require('express')
   , https = require('https')
   , fs = require('fs')
-  , tupas = require('./tupas')
   , app = express();
 
 var globalOpts = {
@@ -27,7 +26,7 @@ var bankOpts = [
   }
 ];
 
-tupas.initialize(globalOpts, bankOpts);
+var tupas = require('./tupas').create(globalOpts, bankOpts);
 
 function handler(tupasStatus, responseData) {
   console.log(tupasStatus);
@@ -44,7 +43,7 @@ var sslOptions = {
 
 app.get('/', function (req, res) {
   var html = "<html><body>" +
-             tupas.tupasForm('danskebank', 'FI') +
+             tupas.tupasButton('danskebank', 'FI') +
              "</body></html>";
   res.send(html);
 });

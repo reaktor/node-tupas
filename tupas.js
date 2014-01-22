@@ -13,23 +13,35 @@ var tupasPath = "/tupas"
   , okPath = tupasPath + "/ok"
   , rejectPath = tupasPath + "/reject";
 
-var tupas = Object.create(events.EventEmitter.prototype),
-    vendorOpts = {},
-    banks = config.banks;
+exports.create = function (globalOpts, bankOpts) {
+  var tupas = Object.create(events.EventEmitter.prototype);
+  var banks = updatedBankConfigsWith(bankOpts);
+  var vendorOpts = _.extend({}, globalOpts,
+    { returnUrls : returnUrls(globalOpts.hostUrl) });
 
-tupas.initialize = function (globalOpts, bankOpts) {
-  vendorOpts = globalOpts;
-  banks = updatedBankConfigsWith(bankOpts);
-  console.log(banks);
+  initializeReturnUrls(vendorOpts.appHandler, vendorOpts);
+  vendorOpts.appHandler.use(express.static(__dirname + '/public'));
 
-  vendorOpts.returnUrls = {
-    ok: vendorOpts.hostUrl + okPath,
-    cancel: vendorOpts.hostUrl + cancelPath,
-    reject: vendorOpts.hostUrl + rejectPath
+  tupas.buildRequestParams = function (bankId, languageCode) {
+    return buildParamsForRequest(findConfig(bankId, banks),
+      languageCode, vendorOpts.returnUrls);
   };
 
-  initializeReturnUrls(vendorOpts.appHandler, vendorOpts.returnUrls);
-  vendorOpts.appHandler.use(express.static(__dirname + '/public'))
+  tupas.tupasButton = function (bankId, languageCode) {
+    return jade.renderFile('./views/form.jade', {
+      bank: tupas.buildRequestParams(bankId, languageCode)
+    });
+  };
+
+  return tupas;
+};
+
+function returnUrls (hostUrl) {
+  return {
+    ok: hostUrl + okPath,
+    cancel: hostUrl + cancelPath,
+    reject: hostUrl + rejectPath
+  };
 }
 
 function updatedBankConfigsWith (bankOpts) {
@@ -56,20 +68,13 @@ function mergeWithDefaults (bankOpts) {
   });
 }
 
-function initializeReturnUrls (handler, returnUrls) {
-  handler.post(returnUrls.ok, ok);
-  handler.get(returnUrls.cancel, cancel);
-  handler.get(returnUrls.reject, reject);
+function initializeReturnUrls (handler, vendorOpts) {
+  handler.post(vendorOpts.returnUrls.ok, ok(vendorOpts.callback));
+  handler.get(vendorOpts.returnUrls.cancel, cancel(vendorOpts.callback));
+  handler.get(vendorOpts.returnUrls.reject, reject(vendorOpts.callback));
 }
 
-tupas.tupasForm = function (bankId, languageCode) {
-  return jade.renderFile('./views/form.jade', {
-    bank: tupas.paramsForBank(bankId, languageCode)
-  });
-}
-
-tupas.paramsForBank = function (bankId, languageCode) {
-  var bank = tupas.bankConfig(bankId);
+function buildParamsForRequest (bank, languageCode, returnUrls) {
   var now = moment().format('YYYYMMDDhhmmss');
   var params = {
     name : bank.name,
@@ -81,55 +86,60 @@ tupas.paramsForBank = function (bankId, languageCode) {
     identifier: now + "123456",
     languageCode: languageCode,
     idType: bank.idType,
-    returnLink: vendorOpts.returnUrls.ok,
-    cancelLink: vendorOpts.returnUrls.cancel,
-    rejectLink: vendorOpts.returnUrls.reject,
+    returnLink: returnUrls.ok,
+    cancelLink: returnUrls.cancel,
+    rejectLink: returnUrls.reject,
     keyVersion: bank.keyVersion,
     algorithmType: "03",
     checksumKey: bank.checksumKey,
     imgPath : bank.imgPath
   };
 
-  params.mac = tupas.generateMAC(params);
+  params.mac = generateMacForRequest (params);
 
   return params;
 }
 
-tupas.bankConfig = function (bankId) {
-  return _.find(banks, function (bank) {
+function findConfig (bankId, bankConfig) {
+  return _.find(bankConfig, function (bank) {
     return bank.id == bankId;
   });
 }
 
-tupas.generateMAC = function (p) {
+function generateMacForRequest (requestParams) {
   var macParams = [
-    p.messageType,
-    p.version,
-    p.vendorId,
-    p.languageCode,
-    p.identifier,
-    p.idType,
-    p.returnLink,
-    p.cancelLink,
-    p.rejectLink,
-    p.keyVersion,
-    p.algorithmType,
-    p.checksumKey]
+    requestParams.messageType,
+    requestParams.version,
+    requestParams.vendorId,
+    requestParams.languageCode,
+    requestParams.identifier,
+    requestParams.idType,
+    requestParams.returnLink,
+    requestParams.cancelLink,
+    requestParams.rejectLink,
+    requestParams.keyVersion,
+    requestParams.algorithmType,
+    requestParams.checksumKey
+  ];
 
   var joinedParams = macParams.join("&") + "&";
   return crypto.createHash('sha256').update(joinedParams).digest('hex');
 }
 
-function ok(req, res) {
-  vendorOpts.callback('OK', req.query)
+function ok(callback) {
+  return function (req, res) {
+    callback('OK', req.query)
+  }
 }
 
-function cancel(req, res) {
-  vendorOpts.callback('CANCEL', req.query)
+function cancel(callback) {
+  return function (req, res) {
+    callback('CANCEL', req.query);
+  }
 }
 
-function reject(req, res) {
-  vendorOpts.callback('REJECT', req.query)
+function reject(callback) {
+  return function (req, res) {
+    callback('REJECT', req.query);
+  }
 }
-
-module.exports = tupas
