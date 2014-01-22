@@ -17,18 +17,43 @@ var tupas = Object.create(events.EventEmitter.prototype),
     vendorOpts = {},
     banks = config.banks;
 
-tupas.initialize = function (appHandler, hostUrl, callback) {
-  vendorOpts.appHandler = appHandler;
-  vendorOpts.hostUrl = hostUrl;
-  vendorOpts.callback = callback;
-  vendorOpts.returnUrls = {
-    ok: hostUrl + okPath,
-    cancel: hostUrl + cancelPath,
-    reject: hostUrl + rejectPath
-  }
+tupas.initialize = function (globalOpts, bankOpts) {
+  vendorOpts = globalOpts;
+  banks = updatedBankConfigsWith(bankOpts);
+  console.log(banks);
 
-  initializeReturnUrls(appHandler, vendorOpts.returnUrls);
-  appHandler.use(express.static(__dirname + '/public'))
+  vendorOpts.returnUrls = {
+    ok: vendorOpts.hostUrl + okPath,
+    cancel: vendorOpts.hostUrl + cancelPath,
+    reject: vendorOpts.hostUrl + rejectPath
+  };
+
+  initializeReturnUrls(vendorOpts.appHandler, vendorOpts.returnUrls);
+  vendorOpts.appHandler.use(express.static(__dirname + '/public'))
+}
+
+function updatedBankConfigsWith (bankOpts) {
+  var updatedDefaults = mergeWithDefaults(bankOpts);
+  var defaultBankIds = _.pluck(updatedDefaults, 'id');
+  var newBanks = _.reject(bankOpts, function (bank) {
+    return _.contains(defaultBankIds, bank.id)
+  });
+
+  return updatedDefaults.concat(newBanks);
+}
+
+function mergeWithDefaults (bankOpts) {
+  return _.map(config.banks, function (bank) {
+    var vendorOpts = _.find(bankOpts, function (bankConf) {
+      return bankConf.id == bank.id;
+    });
+
+    if (vendorOpts) {
+      return _.extend({}, bank, vendorOpts)
+    } else {
+      return bank
+    }
+  });
 }
 
 function initializeReturnUrls (handler, returnUrls) {
@@ -37,14 +62,13 @@ function initializeReturnUrls (handler, returnUrls) {
   handler.get(returnUrls.reject, reject);
 }
 
-tupas.tupasForm = function (bankId, languageCode, checksumKey) {
-  var html = jade.renderFile('./views/form.jade', {
-    bank: tupas.paramsForBank(bankId, languageCode, checksumKey)
+tupas.tupasForm = function (bankId, languageCode) {
+  return jade.renderFile('./views/form.jade', {
+    bank: tupas.paramsForBank(bankId, languageCode)
   });
-  return html;
 }
 
-tupas.paramsForBank = function (bankId, languageCode, vendorId, checksumKey) {
+tupas.paramsForBank = function (bankId, languageCode) {
   var bank = tupas.bankConfig(bankId);
   var now = moment().format('YYYYMMDDhhmmss');
   var params = {
@@ -53,7 +77,7 @@ tupas.paramsForBank = function (bankId, languageCode, vendorId, checksumKey) {
     bankAuthUrl: bank.authUrl,
     messageType: "701",
     version: bank.version,
-    vendorId: vendorId,
+    vendorId: bank.vendorId,
     identifier: now + "123456",
     languageCode: languageCode,
     idType: bank.idType,
@@ -62,21 +86,19 @@ tupas.paramsForBank = function (bankId, languageCode, vendorId, checksumKey) {
     rejectLink: vendorOpts.returnUrls.reject,
     keyVersion: bank.keyVersion,
     algorithmType: "03",
-    checksumKey: checksumKey,
+    checksumKey: bank.checksumKey,
     imgPath : bank.imgPath
-  }
+  };
 
-  var mac = tupas.generateMAC(params);
-  params.mac = mac;
+  params.mac = tupas.generateMAC(params);
 
   return params;
 }
 
 tupas.bankConfig = function (bankId) {
-  var bankConfig = _.find(banks, function (bank) {
+  return _.find(banks, function (bank) {
     return bank.id == bankId;
   });
-  return bankConfig;
 }
 
 tupas.generateMAC = function (p) {

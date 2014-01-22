@@ -4,7 +4,30 @@ var express = require('express')
   , tupas = require('./tupas')
   , app = express();
 
-tupas.initialize(app, "https://localhost:8080", handler);
+var globalOpts = {
+  appHandler: app,
+  hostUrl: "https://localhost:8080",
+  callback: handler
+};
+
+var bankOpts = [
+  {
+    id: 'danskebank',
+    vendorId: 'xxxxxx',
+    checksumKey: 'xxxxxx'
+  },
+  {
+    id: 'nordea',
+    vendorId: 'yyyyyy',
+    checksumKey: 'yyyyyy'
+  },
+  {
+    id : "oma",
+    name : "Oma pankki"
+  }
+];
+
+tupas.initialize(globalOpts, bankOpts);
 
 function handler(tupasStatus, responseData) {
   console.log(tupasStatus);
@@ -21,7 +44,7 @@ var sslOptions = {
 
 app.get('/', function (req, res) {
   var html = "<html><body>" +
-             tupas.tupasForm('danskebank', 'FI', 'xxxxxx', 'xxxxxx') +
+             tupas.tupasForm('danskebank', 'FI') +
              "</body></html>";
   res.send(html);
 });
