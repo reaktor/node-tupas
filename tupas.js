@@ -22,6 +22,8 @@ exports.create = function (globalOpts, bankOpts) {
   initializeReturnUrls(vendorOpts.appHandler, vendorOpts);
   vendorOpts.appHandler.use(express.static(__dirname + '/public'));
 
+  tupas.banks = _.pluck(banks, 'id');
+
   tupas.buildRequestParams = function (bankId, languageCode) {
     return buildParamsForRequest(findConfig(bankId, banks),
       languageCode, vendorOpts.returnUrls);

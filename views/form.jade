@@ -1,10 +1,10 @@
-div(id ='#{bank.id}-login' class='bankLogin'
-    style='cursor: pointer;')
-  img(src = '#{bank.imgPath}' alt = '#{bank.name}' class='bankLoginImage')
-  div
-    a(href = "#" class='bankLoginName') #{bank.name}
-
 form(id= '#{bank.id}-form' method='POST', action='#{bank.bankAuthUrl}')
+  div(id ='#{bank.id}-login' class='bankLogin'
+      style='cursor: pointer;')
+    div
+      img(src = '#{bank.imgPath}' alt = '#{bank.name}' class='bankLoginImage')
+    div
+      a(href = "#" class='bankLoginName') #{bank.name}
 
   input(name='A01Y_ACTION_ID', type='hidden', value='#{bank.messageType}')
   input(name='A01Y_VERS', type='hidden', value='#{bank.version}')
@@ -19,9 +19,9 @@ form(id= '#{bank.id}-form' method='POST', action='#{bank.bankAuthUrl}')
   input(name='A01Y_ALG', type='hidden', value='#{bank.algorithmType}')
   input(name='A01Y_MAC', type='hidden', value='#{bank.mac}')
 
-script.
-  var bankLogin = document.getElementById('#{bank.id}-login');
-  bankLogin.onclick = function() {
-    var form = document.getElementById('#{bank.id}-form');
-    form.submit();
-  };
+  script.
+    var bankLogin = document.getElementById('#{bank.id}-login');
+    bankLogin.onclick = function() {
+      var form = document.getElementById('#{bank.id}-form');
+      form.submit();
+    };

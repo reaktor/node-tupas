@@ -1,7 +1,8 @@
 var express = require('express')
   , https = require('https')
   , fs = require('fs')
-  , app = express();
+  , app = express()
+  , _ = require('underscore')._;
 
 var globalOpts = {
   appHandler: app,
@@ -42,9 +43,11 @@ var sslOptions = {
 };
 
 app.get('/', function (req, res) {
-  var html = "<html><body>" +
-             tupas.tupasButton('danskebank', 'FI') +
-             "</body></html>";
+  var bankForms = _.map(tupas.banks, function (bankId) {
+    return tupas.tupasButton(bankId, 'FI');
+  });
+  var html = "<html><body><div class='bank-buttons'>" + bankForms.join("") + "</div></body></html>";
+
   res.send(html);
 });
 
