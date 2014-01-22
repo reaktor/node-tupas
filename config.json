@@ -7,7 +7,8 @@
         "version" : "0002",
         "keyVersion" : "0001",
         "idType" : "01",
-        "imgPath" : "images/logo_tapiola.gif"
+        "imgPath" : "images/logo_tapiola.gif",
+        "number" : "360"
       },
 
       {
@@ -17,7 +18,8 @@
         "version" : "0003",
         "keyVersion" : "0001",
         "idType" : "01",
-        "imgPath" : "https://www.danskebank.fi/verkkopalvelu/logo.gif"
+        "imgPath" : "https://www.danskebank.fi/verkkopalvelu/logo.gif",
+        "number" : "800"
       },
 
       {
@@ -27,7 +29,8 @@
         "version" : "0002",
         "keyVersion" : "0001",
         "idType" : "01",
-        "imgPath" : "images/logo_handelsbanken.gif"
+        "imgPath" : "images/logo_handelsbanken.gif",
+        "number" : "310"
       },
 
       {
@@ -37,7 +40,8 @@
         "version" : "0002",
         "keyVersion" : "0001",
         "idType" : "01",
-        "imgPath" : "images/logo_nordea.gif"
+        "imgPath" : "images/logo_nordea.gif",
+        "number" : "200"
       },
 
       {
@@ -47,7 +51,8 @@
         "version" : "0003",
         "keyVersion" : "0001",
         "idType" : "02",
-        "imgPath" : "images/logo_op.jpg"
+        "imgPath" : "images/logo_op.jpg",
+        "number" : "500"
       },
 
       {
@@ -57,7 +62,8 @@
         "version" : "0002",
         "keyVersion" : "0001",
         "idType" : "01",
-        "imgPath" : "images/logo_sppop.gif"
+        "imgPath" : "images/logo_sppop.gif",
+        "number" : "400"
       },
 
       {
@@ -67,7 +73,8 @@
         "version" : "0002",
         "keyVersion" : "0001",
         "idType" : "01",
-        "imgPath" : "images/logo_alandsbanken.gif"
+        "imgPath" : "images/logo_alandsbanken.gif",
+        "number" : "600"
       },
 
       {
@@ -77,7 +84,8 @@
         "version" : "0002",
         "keyVersion" : "0001",
         "idType" : "01",
-        "imgPath" : "images/logo_s_pankki.gif"
+        "imgPath" : "images/logo_s_pankki.gif",
+        "number" : "390"
       }
 
     ]

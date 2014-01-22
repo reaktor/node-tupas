@@ -23,6 +23,10 @@ exports.create = function (globalOpts, bankOpts) {
   vendorOpts.appHandler.use(express.static(__dirname + '/public'));
 
   tupas.banks = _.pluck(banks, 'id');
+  tupas.requestMac = generateMacForRequest;
+  tupas.responseMac = function (params) {
+    return generateMacForResponse(params, banks)
+  };
 
   tupas.buildRequestParams = function (bankId, languageCode) {
     return buildParamsForRequest(findConfig(bankId, banks),
@@ -70,11 +74,11 @@ function mergeWithDefaults (bankOpts) {
   });
 }
 
-function initializeReturnUrls (eventEmitter, vendorOpts) {
+function initializeReturnUrls (tupas, vendorOpts) {
   var handler = vendorOpts.appHandler;
-  handler.post(okPath, ok(eventEmitter));
-  handler.get(cancelPath, cancel(eventEmitter));
-  handler.get(rejectPath, reject(eventEmitter));
+  handler.post(okPath, ok(tupas));
+  handler.get(cancelPath, cancel(tupas));
+  handler.get(rejectPath, reject(tupas));
 }
 
 function buildParamsForRequest (bank, languageCode, returnUrls) {
@@ -125,24 +129,56 @@ function generateMacForRequest (requestParams) {
     requestParams.checksumKey
   ];
 
-  var joinedParams = macParams.join("&") + "&";
+  return generateMac(macParams);
+}
+
+function generateMacForResponse (queryParams, bankConfig) {
+  var bankNumber = queryParams.B02K_TIMESTMP.substr(0, 3);
+  var bank = _.find(bankConfig, function (bank) {
+    return bank.number == bankNumber;
+  });
+
+  var macParams = _.compact([
+    queryParams.B02K_VERS,
+    queryParams.B02K_TIMESTMP,
+    queryParams.B02K_IDNBR,
+    queryParams.B02K_STAMP,
+    queryParams.B02K_CUSTNAME,
+    queryParams.B02K_KEYVERS,
+    queryParams.B02K_ALG,
+    queryParams.B02K_CUSTID,
+    queryParams.B02K_CUSTTYPE,
+    queryParams.B02K_USERID,
+    queryParams.B02K_USERNAME,
+    bank.checksumKey
+  ]);
+
+  return generateMac(macParams);
+}
+
+function generateMac(params) {
+  var joinedParams = params.join("&") + "&";
   return crypto.createHash('sha256').update(joinedParams).digest('hex');
 }
 
-function ok (eventEmitter) {
+function ok (tupas) {
   return function (req, res) {
-    eventEmitter.emit('success', req.query, res);
+    if (req.query.B02K_MAC === tupas.responseMac(req.query)) {
+      tupas.emit('success', req.query, res);
+    } else {
+      tupas.emit('mac-check-failed', req.query, res);
+    }
   }
 }
 
-function cancel (eventEmitter) {
+function cancel (tupas) {
   return function (req, res) {
-    eventEmitter.emit('cancel', res);
+    tupas.emit('cancel', res);
   }
 }
 
-function reject (eventEmitter) {
+function reject (tupas) {
   return function (req, res) {
-    eventEmitter.emit('reject', res);
+    tupas.emit('reject', res);
   }
 }
