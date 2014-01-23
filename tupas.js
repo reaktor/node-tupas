@@ -74,6 +74,7 @@ function mergeWithDefaults (bankOpts) {
 
 function bindReturnUrlsToHandler (tupas, handler) {
   handler.post(okPath, ok(tupas));
+  handler.get(okPath, ok(tupas));
   handler.get(cancelPath, cancel(tupas));
   handler.get(rejectPath, reject(tupas));
 }
@@ -135,7 +136,7 @@ function generateMacForResponse (queryParams, bankConfig) {
     return bank.number == bankNumber;
   });
 
-  var macParams = _.compact([
+  var macParams = _.map(_.compact([
     queryParams.B02K_VERS,
     queryParams.B02K_TIMESTMP,
     queryParams.B02K_IDNBR,
@@ -148,19 +149,19 @@ function generateMacForResponse (queryParams, bankConfig) {
     queryParams.B02K_USERID,
     queryParams.B02K_USERNAME,
     bank.checksumKey
-  ]);
+  ]), unescape);
 
   return generateMac(macParams);
 }
 
 function generateMac(params) {
   var joinedParams = params.join("&") + "&";
-  return crypto.createHash('sha256').update(joinedParams).digest('hex');
+  return crypto.createHash('sha256').update(joinedParams).digest('hex').toUpperCase();
 }
 
 function ok (tupas) {
   return function (req, res) {
-    if (req.query.B02K_MAC === tupas.responseMac(req.query)) {
+    if (req.query.B02K_MAC.toUpperCase() === tupas.responseMac(req.query)) {
       tupas.emit('success', req.query, res);
     } else {
       tupas.emit('mac-check-failed', req.query, res);

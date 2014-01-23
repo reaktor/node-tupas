@@ -10,24 +10,7 @@ var globalOpts = {
   callback: handler
 };
 
-var bankOpts = [
-  {
-    id: 'danskebank',
-    vendorId: 'xxxxxx',
-    checksumKey: 'xxxxxx'
-  },
-  {
-    id: 'nordea',
-    vendorId: 'yyyyyy',
-    checksumKey: 'yyyyyy'
-  },
-  {
-    id : "oma",
-    name : "Oma pankki"
-  }
-];
-
-var tupas = require('./tupas').create(globalOpts, bankOpts);
+var tupas = require('./tupas').create(globalOpts, []);
 
 tupas.on('success', function (data, res) {
   console.log(data);
