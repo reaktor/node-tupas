@@ -21,5 +21,7 @@ casper.test.begin("Nordea Authentication", 1, function(test) {
     this.echo("Succesfully authenticated with Nordea");
   });
 
-  casper.run();
+  casper.run(function() {
+    test.done();
+  });
 });

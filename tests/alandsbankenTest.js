@@ -27,5 +27,7 @@ casper.test.begin("Alandsbanken", 1, function(test) {
     this.echo("Succesfully authenticated with Alandsbanken");
   });
 
-  casper.run();
+  casper.run(function() {
+    test.done();
+  });
 });

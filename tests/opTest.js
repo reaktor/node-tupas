@@ -27,5 +27,7 @@ casper.test.begin("OP Authentication", 1, function(test) {
     this.echo("Succesfully authenticated with OP");
   }, function(){}, 10000);
 
-  casper.run();
+  casper.run(function() {
+    test.done();
+  });
 });

@@ -27,5 +27,7 @@ casper.test.begin("S-Pankki Authentication", 1, function(test) {
     this.echo("Succesfully authenticated with S-Pankki");
   });
 
-  casper.run();
+  casper.run(function() {
+    test.done();
+  });
 });

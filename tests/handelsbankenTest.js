@@ -35,5 +35,7 @@ casper.test.begin("Handelsbanken Authentication", 1, function(test) {
   }, function(){}, 10000);
 
 
-  casper.run();
+  casper.run(function() {
+    test.done();
+  });
 });

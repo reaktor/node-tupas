@@ -27,7 +27,9 @@ casper.test.begin("Tapiola Authentication", 1, function(test) {
     this.echo("Succesfully authenticated with Tapiola");
    });
 
-  casper.run();
+  casper.run(function() {
+    test.done();
+  });
 });
 
 
