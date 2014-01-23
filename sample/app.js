@@ -13,23 +13,19 @@ var globalOpts = {
 var tupas = require(__dirname + '/../tupas').create(globalOpts);
 
 tupas.on('success', function (data, res) {
-  console.log(data);
-  res.send(data);
+  res.send("<html><h1 id='success'>SUCCES</h1></html>");
 });
 
 tupas.on('mac-check-failed', function (data, res) {
-  console.log(data);
-  res.send("MAC check failed.");
+  res.send("<html><h1 id='mac-check-failed'>MAC-CHECK-FAILED</h1></html>");
 });
 
 tupas.on('cancel', function (res) {
-  console.log("Cancelled");
-  res.send("Tupas identification was cancelled.")
+  res.send("<html><h1 id='cancel'>CANCEL</h1></html>");
 });
 
 tupas.on('reject', function (res) {
-  console.log("Rejected.");
-  res.send("Identification failed.")
+  res.send("<html><h1 id='reject'>REJECT</h1></html>");
 });
 
 function handler(tupasStatus, responseData) {
@@ -62,4 +58,10 @@ app.get('/', function (req, res) {
   res.send(html);
 });
 
-https.createServer(sslOptions, app).listen(8080);
+var server = https.createServer(sslOptions, app);
+
+exports = module.exports = server;
+// delegates user() function
+exports.use = function() {
+  app.use.apply(app, arguments);
+};

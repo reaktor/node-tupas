@@ -11,7 +11,12 @@
   "dependencies": {
     "express": "3.4.8",
     "jade": "1.1.5",
-    "moment" : "2.5.0",
-    "underscore" : "1.5.2"
+    "moment": "2.5.0",
+    "underscore": "1.5.2"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-express": "~1.2.1",
+    "grunt-casperjs": "~1.4.0"
   }
 }
