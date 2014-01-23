@@ -21,7 +21,7 @@ tupas.on('success', function (data, res) {
 tupas.on('mac-check-failed', function (data, res) {
   console.log(data);
   res.send("MAC check failed.");
-})
+});
 
 tupas.on('cancel', function (res) {
   console.log("Cancelled");
