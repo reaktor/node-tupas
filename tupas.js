@@ -19,7 +19,7 @@ exports.create = function (globalOpts, bankOpts) {
   var vendorOpts = _.extend({}, globalOpts,
     { returnUrls : returnUrls(globalOpts.hostUrl) });
 
-  initializeReturnUrls(tupas, vendorOpts);
+  bindReturnUrlsToHandler(tupas, vendorOpts.appHandler);
   vendorOpts.appHandler.use(express.static(__dirname + '/public'));
 
   tupas.banks = _.pluck(banks, 'id');
@@ -74,8 +74,7 @@ function mergeWithDefaults (bankOpts) {
   });
 }
 
-function initializeReturnUrls (tupas, vendorOpts) {
-  var handler = vendorOpts.appHandler;
+function bindReturnUrlsToHandler (tupas, handler) {
   handler.post(okPath, ok(tupas));
   handler.get(cancelPath, cancel(tupas));
   handler.get(rejectPath, reject(tupas));
