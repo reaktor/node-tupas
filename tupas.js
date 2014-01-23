@@ -1,9 +1,7 @@
 var crypto = require("crypto")
-  , request = require("superagent")
   , jade = require("jade")
   , moment = require("moment")
   , events = require('events')
-  , fs = require('fs')
   , _ = require('underscore')._
   , express = require('express')
   , config = require('./config.json');
