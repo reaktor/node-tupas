@@ -1,2 +1,3 @@
 var app = require("./app");
-app.listen(8081);
+var config = require("../config.json");
+app.listen(config.port);

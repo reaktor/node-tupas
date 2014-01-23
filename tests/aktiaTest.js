@@ -1,7 +1,7 @@
 var x = require('casper').selectXPath;
-
+var config = require("../config.json");
 casper.test.begin("Aktia Authentication", 1, function(test) {
-  casper.start('https://localhost:8080', function() {
+  casper.start('https://localhost:' + config.port , function() {
     this.click("#aktia-login");
   });
 

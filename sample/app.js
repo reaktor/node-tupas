@@ -3,11 +3,12 @@ var express = require('express')
   , fs = require('fs')
   , app = express()
   , _ = require('underscore')._
-  , moment = require("moment");
+  , moment = require("moment")
+  , config = require("../config.json");
 
 var globalOpts = {
   appHandler: app,
-  hostUrl: "https://localhost:8080"
+  hostUrl: "https://localhost:" + config.port
 };
 
 var tupas = require(__dirname + '/../tupas').create(globalOpts);

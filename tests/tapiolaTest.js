@@ -1,5 +1,7 @@
+var config = require("../config.json");
+
 casper.test.begin("Tapiola Authentication", 1, function(test) {
-  casper.start('https://localhost:8080', function() {
+  casper.start('https://localhost:' + config.port, function() {
    this.click("#tapiola-login");
   });
 

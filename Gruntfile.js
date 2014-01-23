@@ -1,12 +1,13 @@
 module.exports = function(grunt) {
 
+  var config = require("./config.json");
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
     express: {
       options: {
-        port: 8080,
+        port: config.port,
         server : 'sample/app.js',
         hostname : "localhost"
       }
