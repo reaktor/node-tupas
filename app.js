@@ -10,7 +10,7 @@ var globalOpts = {
   callback: handler
 };
 
-var tupas = require('./tupas').create(globalOpts, []);
+var tupas = require('./tupas').create(globalOpts);
 
 tupas.on('success', function (data, res) {
   console.log(data);
