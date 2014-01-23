@@ -7,8 +7,7 @@ var express = require('express')
 
 var globalOpts = {
   appHandler: app,
-  hostUrl: "https://localhost:8080",
-  callback: handler
+  hostUrl: "https://localhost:8080"
 };
 
 var tupas = require(__dirname + '/../tupas').create(globalOpts);
