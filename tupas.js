@@ -31,7 +31,7 @@ exports.create = function (globalOpts, bankOpts) {
   };
 
   tupas.tupasButton = function (bankId, languageCode, requestId) {
-    return jade.renderFile('./views/form.jade', {
+    return jade.renderFile(__dirname + '/views/form.jade', {
       bank: tupas.buildRequestParams(bankId, languageCode, requestId)
     });
   };

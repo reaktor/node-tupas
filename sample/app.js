@@ -11,7 +11,7 @@ var globalOpts = {
   callback: handler
 };
 
-var tupas = require('./tupas').create(globalOpts);
+var tupas = require(__dirname + '/../tupas').create(globalOpts);
 
 tupas.on('success', function (data, res) {
   console.log(data);
@@ -39,10 +39,10 @@ function handler(tupasStatus, responseData) {
 }
 
 var sslOptions = {
-  key: fs.readFileSync('../../certs/server.key'),
-  cert: fs.readFileSync('../../certs/server.crt'),
-  ca: fs.readFileSync('../../certs/ca.crt'),
-  requestCert: true,
+  key: fs.readFileSync(__dirname + '/certs/server.key'),
+  cert: fs.readFileSync(__dirname + '/certs/server.crt'),
+  ca: fs.readFileSync(__dirname + '/certs/ca.crt'),
+  requestCert: false,
   rejectUnauthorized: false
 };
 
