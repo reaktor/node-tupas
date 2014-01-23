@@ -2,7 +2,8 @@ var express = require('express')
   , https = require('https')
   , fs = require('fs')
   , app = express()
-  , _ = require('underscore')._;
+  , _ = require('underscore')._
+  , moment = require("moment");
 
 var globalOpts = {
   appHandler: app,
@@ -46,8 +47,11 @@ var sslOptions = {
 };
 
 app.get('/', function (req, res) {
+  var now = moment().format('YYYYMMDDhhmmss');
+  var requestId = now + "123456";
+
   var bankForms = _.map(tupas.banks, function (bankId) {
-    return tupas.tupasButton(bankId, 'FI');
+    return tupas.tupasButton(bankId, 'FI', requestId);
   });
   var html = "<html><body><div class='bank-buttons'>" + bankForms.join("") + "</div></body></html>";
 

@@ -1,6 +1,5 @@
 var crypto = require("crypto")
   , jade = require("jade")
-  , moment = require("moment")
   , events = require('events')
   , _ = require('underscore')._
   , express = require('express')
@@ -26,14 +25,14 @@ exports.create = function (globalOpts, bankOpts) {
     return generateMacForResponse(params, banks)
   };
 
-  tupas.buildRequestParams = function (bankId, languageCode) {
+  tupas.buildRequestParams = function (bankId, languageCode, requestId) {
     return buildParamsForRequest(findConfig(bankId, banks),
-      languageCode, vendorOpts.returnUrls);
+      languageCode, vendorOpts.returnUrls, requestId);
   };
 
-  tupas.tupasButton = function (bankId, languageCode) {
+  tupas.tupasButton = function (bankId, languageCode, requestId) {
     return jade.renderFile('./views/form.jade', {
-      bank: tupas.buildRequestParams(bankId, languageCode)
+      bank: tupas.buildRequestParams(bankId, languageCode, requestId)
     });
   };
 
@@ -73,14 +72,13 @@ function mergeWithDefaults (bankOpts) {
 }
 
 function bindReturnUrlsToHandler (tupas, handler) {
-  handler.post(okPath, ok(tupas));
-  handler.get(okPath, ok(tupas));
+  handler.post(okPath, ok(tupas)); // Danske Bank uses POST.
+  handler.get(okPath, ok(tupas));  // Others use GET.
   handler.get(cancelPath, cancel(tupas));
   handler.get(rejectPath, reject(tupas));
 }
 
-function buildParamsForRequest (bank, languageCode, returnUrls) {
-  var now = moment().format('YYYYMMDDhhmmss');
+function buildParamsForRequest (bank, languageCode, returnUrls, requestId) {
   var params = {
     name : bank.name,
     id : bank.id,
@@ -88,7 +86,7 @@ function buildParamsForRequest (bank, languageCode, returnUrls) {
     messageType: "701",
     version: bank.version,
     vendorId: bank.vendorId,
-    identifier: now + "123456",
+    identifier: requestId,
     languageCode: languageCode,
     idType: bank.idType,
     returnLink: returnUrls.ok,
