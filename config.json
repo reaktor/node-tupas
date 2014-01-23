@@ -8,7 +8,9 @@
         "keyVersion" : "0001",
         "idType" : "01",
         "imgPath" : "images/logo_tapiola.gif",
-        "number" : "360"
+        "number" : "360",
+        "vendorId" : "TAPTUPASID",
+        "checksumKey": "PAPAKAIJU"
       },
 
       {
@@ -19,7 +21,9 @@
         "keyVersion" : "0001",
         "idType" : "01",
         "imgPath" : "https://www.danskebank.fi/verkkopalvelu/logo.gif",
-        "number" : "800"
+        "number" : "800",
+        "vendorId" : "000000000000",
+        "checksumKey": "pAwfvWTD7g9etWGNTVR5zCj5EhHt5yuHdLrxQH2BD5gZxk7xBUrfqubtYv8vZvs4"
       },
 
       {
@@ -30,7 +34,9 @@
         "keyVersion" : "0001",
         "idType" : "01",
         "imgPath" : "images/logo_handelsbanken.gif",
-        "number" : "310"
+        "number" : "310",
+        "vendorId" : "1111111111111",
+        "checksumKey": "11111111111111111111"
       },
 
       {
@@ -41,7 +47,9 @@
         "keyVersion" : "0001",
         "idType" : "01",
         "imgPath" : "images/logo_nordea.gif",
-        "number" : "200"
+        "number" : "200",
+        "vendorId" : "87654321",
+        "checksumKey": "LEHTI"
       },
 
       {
@@ -52,7 +60,9 @@
         "keyVersion" : "0001",
         "idType" : "02",
         "imgPath" : "images/logo_op.jpg",
-        "number" : "500"
+        "number" : "500",
+        "vendorId" : "Esittelymyyja",
+        "checksumKey": "Esittelykauppiaansalainentunnus"
       },
 
       {
@@ -63,7 +73,9 @@
         "keyVersion" : "0001",
         "idType" : "01",
         "imgPath" : "images/logo_sppop.gif",
-        "number" : "400"
+        "number" : "400",
+        "vendorId" : "1111111111111",
+        "checksumKey": "11111111111111111111"
       },
 
       {
@@ -74,7 +86,9 @@
         "keyVersion" : "0001",
         "idType" : "01",
         "imgPath" : "images/logo_alandsbanken.gif",
-        "number" : "600"
+        "number" : "600",
+        "vendorId" : "AABTUPASID",
+        "checksumKey": "PAPAGAJA"
       },
 
       {
@@ -85,7 +99,9 @@
         "keyVersion" : "0001",
         "idType" : "01",
         "imgPath" : "images/logo_s_pankki.gif",
-        "number" : "390"
+        "number" : "390",
+        "vendorId" : "SPANKKITUPAS",
+        "checksumKey": "SPANKKI"
       }
 
     ]
