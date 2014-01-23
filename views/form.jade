@@ -1,10 +1,10 @@
-form(id= '#{bank.id}-form' method='POST', action='#{bank.bankAuthUrl}')
+form(id= '#{bank.id}-form' method='POST', action='#{bank.bankAuthUrl}', class='tupasButton')
   div(id ='#{bank.id}-login' class='bankLogin'
       style='cursor: pointer;')
-    div
-      img(src = '#{bank.imgPath}' alt = '#{bank.name}' class='bankLoginImage')
-    div
-      a(href = "#" class='bankLoginName') #{bank.name}
+    div(class='bankLoginImage')
+      img(src = '#{bank.imgPath}' alt = '#{bank.name}')
+    div(class='bankLoginName')
+      a(href = "#") #{bank.name}
 
   input(name='A01Y_ACTION_ID', type='hidden', value='#{bank.messageType}')
   input(name='A01Y_VERS', type='hidden', value='#{bank.version}')

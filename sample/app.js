@@ -46,6 +46,8 @@ var sslOptions = {
   rejectUnauthorized: false
 };
 
+app.use(express.static(__dirname + '/css'))
+
 app.get('/', function (req, res) {
   var now = moment().format('YYYYMMDDhhmmss');
   var requestId = now + "123456";
@@ -53,7 +55,10 @@ app.get('/', function (req, res) {
   var bankForms = _.map(tupas.banks, function (bankId) {
     return tupas.tupasButton(bankId, 'FI', requestId);
   });
-  var html = "<html><body><div class='bank-buttons'>" + bankForms.join("") + "</div></body></html>";
+  var html = "<html>"+
+             "<head><link rel='stylesheet' type='text/css' href='app.css'></head>"+
+             "<body><div class='tupasButtons'>" + bankForms.join("") + "</div></body>"+
+             "</html>";
 
   res.send(html);
 });
