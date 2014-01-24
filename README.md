@@ -75,7 +75,7 @@ var buttonHtml = tupas.tupasButton('nordea', 'FI', requestId);
 ...or if you just want the request parameters without generating any HTML:
 
 ```javascript
-var params = tupas.buildRequestParams('nordea', 'Fi', requestId);
+var params = tupas.buildRequestParams('nordea', 'FI', requestId);
 ```
 
 ### Get a listing of all configured banks (IDs)
