@@ -93,20 +93,19 @@ and `/tupas/reject` (only GET) to the given Express app for use as return urls.
 
 Response handling is event based.
 ```javascript
-tupas.on('success', function (data, res) {
-  // Successful tupas authentication.
-  // The data parameter contains query params.
+tupas.on('success', function (request, response) {
+  // Successful tupas authentication. Get auth data from request.query.
 });
 
-tupas.on('mac-check-failed', function (data, res) {
+tupas.on('mac-check-failed', function (request, response) {
   // Successful tupas authentication but the message was faulty.
 });
 
-tupas.on('cancel', function (res) {
+tupas.on('cancel', function (request, response) {
   // User cancelled authentication.
 });
 
-tupas.on('reject', function (res) {
+tupas.on('reject', function (request, response) {
   // Authentication attempt was rejected by the bank.
 });
 ```
