@@ -10,6 +10,10 @@ Currently requires Express.
 
 TODO
 
+## Testing
+
+Run tests with grunt.
+
 ## Usage and configuration
 
 ### Basic usage (using default configurations)
@@ -44,14 +48,14 @@ var bankOptions = [
     vendorId : "xxxxxxx",
     checksumKey : "xxxxxxx"
   }
-]
+];
 
 var tupas = require('tupas').create(generalOptions, bankOptions);
 ```
 
-***Options:***
+***Options for banks:***
 
-- `id` - identifier for the bank, used internally
+- `id` - identifier for the bank (always use when configuring, see `config.json` for built-in options)
 - `authUrl` - url for the tupas authentication service
 - `version` - A01Y_VERS
 - `keyVersion` - A01Y_KEYVERS
@@ -74,7 +78,7 @@ var buttonHtml = tupas.tupasButton('nordea', 'FI', requestId);
 var params = tupas.buildRequestParams('nordea', 'Fi', requestId);
 ```
 
-### Get a listing of all configured banks
+### Get a listing of all configured banks (IDs)
 
 ```javascript
 var banks = tupas.banks
@@ -106,3 +110,8 @@ tupas.on('reject', function (res) {
   // Authentication attempt was rejected by the bank.
 });
 ```
+
+### Sample application
+
+See `sample/app.js` for a simple usage example. Run the
+sample app locally with `node sample/start-sample.js`.
