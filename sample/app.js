@@ -15,7 +15,7 @@ var tupas = require(__dirname + '/../tupas').create(globalOpts);
 
 tupas.on('success', function (req, res) {
   console.log(req.query);
-  res.send("<html><h1 id='success'>SUCCES</h1></html>");
+  res.send("<html><h1 id='success'>SUCCESS</h1></html>");
 });
 
 tupas.on('mac-check-failed', function (req, res) {
@@ -54,7 +54,7 @@ app.get('/', function (req, res) {
   });
   var html = "<html>"+
              "<head><link rel='stylesheet' type='text/css' href='app.css'></head>"+
-             "<body><div class='tupasButtons'>" + bankForms.join("") + "</div></body>"+
+             "<body><div class='tupas-buttons'>" + bankForms.join("") + "</div></body>"+
              "</html>";
 
   res.send(html);

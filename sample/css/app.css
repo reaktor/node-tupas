@@ -1,22 +1,22 @@
-.tupasButtons {
+.tupas-buttons {
   display: block;
 }
 
-.bankLoginImage {
+.bank-login-image {
   position: relative;
   top: 0;
   height: 70px;
   text-align: center;
 }
 
-.bankLoginName {
+.bank-login-name {
   position: relative;
   bottom: 0;
   line-height: 1.5em;
   text-align: center;
 }
 
-.tupasButton {
+.tupas-button {
   display: block;
   float: left;
   padding: 0.8em;

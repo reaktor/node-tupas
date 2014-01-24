@@ -1,5 +1,4 @@
 var crypto = require("crypto")
-  , jade = require("jade")
   , events = require('events')
   , _ = require('underscore')._
   , express = require('express')
@@ -9,6 +8,33 @@ var tupasPath = "/tupas"
   , cancelPath = tupasPath + "/cancel"
   , okPath = tupasPath + "/ok"
   , rejectPath = tupasPath + "/reject";
+
+var tupasFormTemplate = _.template(
+                         '<form id="<%= id %>-form" method="POST" action="<%= bankAuthUrl %>" class="tupas-button">'+
+                         '<div id="<%= id %>-login" style="cursor: pointer">' +
+                         '<div class="bank-login-image"><img src="<%= imgPath %>" alt="<%= name %>"></div>' +
+                         '<div class="bank-login-name"><a href="#"><%= name %></a></div>' +
+                         '</div>' +
+                         '<input name="A01Y_ACTION_ID" type="hidden" value="<%= messageType %>">' +
+                         '<input name="A01Y_VERS" type="hidden" value="<%= version %>">' +
+                         '<input name="A01Y_RCVID" type="hidden" value="<%= vendorId %>">' +
+                         '<input name="A01Y_LANGCODE" type="hidden" value="<%= languageCode %>">' +
+                         '<input name="A01Y_STAMP" type="hidden" value="<%= identifier %>">' +
+                         '<input name="A01Y_IDTYPE" type="hidden" value="<%= idType %>">' +
+                         '<input name="A01Y_RETLINK" type="hidden" value="<%= returnLink %>">' +
+                         '<input name="A01Y_CANLINK" type="hidden" value="<%= cancelLink %>">' +
+                         '<input name="A01Y_REJLINK" type="hidden" value="<%= rejectLink %>">' +
+                         '<input name="A01Y_KEYVERS" type="hidden" value="<%= keyVersion %>">' +
+                         '<input name="A01Y_ALG" type="hidden" value="<%= algorithmType %>">' +
+                         '<input name="A01Y_MAC" type="hidden" value="<%= mac %>">' +
+                         '<script>' +
+                         'var bankLogin = document.getElementById("<%= id %>-login");' +
+                         'bankLogin.onclick = function() {' +
+                         '  var form = document.getElementById("<%= id %>-form");' +
+                         '  form.submit();' +
+                         '};' +
+                         '</script>' +
+                         '</form>');
 
 exports.create = function (globalOpts, bankOpts) {
   var tupas = Object.create(events.EventEmitter.prototype);
@@ -31,9 +57,8 @@ exports.create = function (globalOpts, bankOpts) {
   };
 
   tupas.tupasButton = function (bankId, languageCode, requestId) {
-    return jade.renderFile(__dirname + '/views/form.jade', {
-      bank: tupas.buildRequestParams(bankId, languageCode, requestId)
-    });
+    var formParams = tupas.buildRequestParams(bankId, languageCode, requestId);
+    return tupasFormTemplate(formParams);
   };
 
   return tupas;
