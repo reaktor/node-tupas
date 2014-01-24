@@ -13,19 +13,20 @@ var globalOpts = {
 
 var tupas = require(__dirname + '/../tupas').create(globalOpts);
 
-tupas.on('success', function (data, res) {
+tupas.on('success', function (req, res) {
+  console.log(req.query);
   res.send("<html><h1 id='success'>SUCCES</h1></html>");
 });
 
-tupas.on('mac-check-failed', function (data, res) {
+tupas.on('mac-check-failed', function (req, res) {
   res.send("<html><h1 id='mac-check-failed'>MAC-CHECK-FAILED</h1></html>");
 });
 
-tupas.on('cancel', function (res) {
+tupas.on('cancel', function (req, res) {
   res.send("<html><h1 id='cancel'>CANCEL</h1></html>");
 });
 
-tupas.on('reject', function (res) {
+tupas.on('reject', function (req, res) {
   res.send("<html><h1 id='reject'>REJECT</h1></html>");
 });
 

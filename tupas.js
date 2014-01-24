@@ -162,21 +162,21 @@ function generateMac(params) {
 function ok (tupas) {
   return function (req, res) {
     if (req.query.B02K_MAC.toUpperCase() === tupas.responseMac(req.query)) {
-      tupas.emit('success', req.query, res);
+      tupas.emit('success', req, res);
     } else {
-      tupas.emit('mac-check-failed', req.query, res);
+      tupas.emit('mac-check-failed', req, res);
     }
   }
 }
 
 function cancel (tupas) {
   return function (req, res) {
-    tupas.emit('cancel', res);
+    tupas.emit('cancel', req, res);
   }
 }
 
 function reject (tupas) {
   return function (req, res) {
-    tupas.emit('reject', res);
+    tupas.emit('reject', req, res);
   }
 }
