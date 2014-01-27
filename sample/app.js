@@ -30,11 +30,6 @@ tupas.on('reject', function (req, res) {
   res.send("<html><h1 id='reject'>REJECT</h1></html>");
 });
 
-function handler(tupasStatus, responseData) {
-  console.log(tupasStatus);
-  console.log(responseData);
-}
-
 var sslOptions = {
   key: fs.readFileSync(__dirname + '/certs/server.key'),
   cert: fs.readFileSync(__dirname + '/certs/server.crt'),
