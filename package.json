@@ -1,8 +1,8 @@
 {
   "name": "tupas",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A module for TUPAS identification.",
-  "main": "index.js",
+  "main": "tupas.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
