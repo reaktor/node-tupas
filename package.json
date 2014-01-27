@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "description": "A module for TUPAS identification.",
   "main": "tupas.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "homepage" : "https://github.com/reaktor/node-tupas",
+
+  "author": {
+    "name" : "Reaktor",
+    "url" : "http://www.reaktor.fi"
   },
-  "author": "",
+
   "license": "MIT",
   "dependencies": {
     "express": "3.4.8",
