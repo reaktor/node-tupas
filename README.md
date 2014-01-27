@@ -6,9 +6,17 @@ Aktia, Ålandsbanken and S-Pankki.
 
 Currently requires Express.
 
+## About
+
+Made at [Reaktor](http://reaktor.fi).
+
+Apply for juicy positions at [reaktor.fi/careers](http://reaktor.fi/careers).
+
 ## Install
 
-TODO
+```
+npm install tupas
+```
 
 ## Testing
 
