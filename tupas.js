@@ -29,10 +29,15 @@ var tupasFormTemplate = _.template(
                          '<input name="A01Y_MAC" type="hidden" value="<%= mac %>">' +
                          '<script>' +
                          'var bankLogin = document.getElementById("<%= id %>-login");' +
-                         'bankLogin.onclick = function() {' +
-                         '  var form = document.getElementById("<%= id %>-form");' +
-                         '  form.submit();' +
-                         '};' +
+                         'var clickHandler = function() {' +
+                            'document.getElementById("<%= id %>-form").submit();' +
+                          '};' +
+                         'if(bankLogin.addEventListener) {' +
+                           'bankLogin.addEventListener("click", clickHandler, false);' +
+                          '}'+
+                         'else if (bankLogin.attachEvent) {' +
+                           'bankLogin.attachEvent("onclick", clickHandler);' +
+                         '}' +
                          '</script>' +
                          '</form>');
 
