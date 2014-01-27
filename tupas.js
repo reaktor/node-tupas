@@ -191,7 +191,7 @@ function generateMac(params) {
 
 function ok (tupas) {
   return function (req, res) {
-    if (req.query.B02K_MAC.toUpperCase() === tupas.responseMac(req.query)) {
+    if (req.query.B02K_MAC && req.query.B02K_MAC.toUpperCase() === tupas.responseMac(req.query)) {
       tupas.emit('success', req, res);
     } else {
       tupas.emit('mac-check-failed', req, res);

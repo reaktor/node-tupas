@@ -19,7 +19,7 @@ tupas.on('success', function (req, res) {
 });
 
 tupas.on('mac-check-failed', function (req, res) {
-  res.send("<html><h1 id='mac-check-failed'>MAC-CHECK-FAILED</h1></html>");
+  res.send(400, "<html><h1 id='mac-check-failed'>MAC-CHECK-FAILED</h1></html>");
 });
 
 tupas.on('cancel', function (req, res) {

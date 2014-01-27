@@ -22,13 +22,23 @@ module.exports = function(grunt) {
 
         },
         files: ['tests/*.js']
+    },
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'spec'
+        },
+        src: ['tests/unit/*.js']
+      }
     }
+
   });
 
   grunt.loadNpmTasks('grunt-express');
   grunt.loadNpmTasks('grunt-casperjs');
+  grunt.loadNpmTasks('grunt-mocha-test');
 
   // Default task(s).
-  grunt.registerTask('default', ['express-server', 'casperjs']);
+  grunt.registerTask('default', ['express-server', 'casperjs', 'mochaTest']);
 
 };
