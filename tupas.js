@@ -9,6 +9,10 @@ var tupasPath = "/tupas"
   , okPath = tupasPath + "/ok"
   , rejectPath = tupasPath + "/reject";
 
+var SHA256 = "03"
+  , TUPAS_MESSAGE_TYPE = "701"
+  , LANG_CODES = ['FI', 'SV', 'EN'];
+
 var tupasFormTemplate = _.template(
                          '<form id="<%= id %>-form" method="POST" action="<%= bankAuthUrl %>" class="tupas-button">'+
                          '<div id="<%= id %>-login" style="cursor: pointer">' +
@@ -42,6 +46,9 @@ var tupasFormTemplate = _.template(
                          '</form>');
 
 exports.create = function (globalOpts, bankOpts) {
+  requireArgument(globalOpts.appHandler, "globalOpts.appHandler");
+  requireArgument(globalOpts.hostUrl, "globalOpts.hostUrl");
+
   var tupas = Object.create(events.EventEmitter.prototype);
   var banks = updatedBankConfigsWith(bankOpts);
   var vendorOpts = _.extend({}, globalOpts,
@@ -68,6 +75,12 @@ exports.create = function (globalOpts, bankOpts) {
 
   return tupas;
 };
+
+function requireArgument(argValue, argName) {
+  if (typeof argValue === "undefined" || argValue === null) {
+    throw "Missing required argument " + argName + ".";
+  }
+}
 
 function returnUrls (hostUrl) {
   return {
@@ -109,11 +122,16 @@ function bindReturnUrlsToHandler (tupas, handler) {
 }
 
 function buildParamsForRequest (bank, languageCode, returnUrls, requestId) {
+  if (invalidLangCode(languageCode))
+    throw "Unsupported language code: " + languageCode + ".";
+  if (requestId.length > 20)
+    throw "Request id too long: " + requestId + ".";
+
   var params = {
     name : bank.name,
     id : bank.id,
     bankAuthUrl: bank.authUrl,
-    messageType: "701",
+    messageType: TUPAS_MESSAGE_TYPE,
     version: bank.version,
     vendorId: bank.vendorId,
     identifier: requestId,
@@ -123,7 +141,7 @@ function buildParamsForRequest (bank, languageCode, returnUrls, requestId) {
     cancelLink: returnUrls.cancel,
     rejectLink: returnUrls.reject,
     keyVersion: bank.keyVersion,
-    algorithmType: "03",
+    algorithmType: SHA256,
     checksumKey: bank.checksumKey,
     imgPath : bank.imgPath
   };
@@ -131,6 +149,10 @@ function buildParamsForRequest (bank, languageCode, returnUrls, requestId) {
   params.mac = generateMacForRequest (params);
 
   return params;
+}
+
+function invalidLangCode(langCode) {
+  return !_.contains(LANG_CODES, langCode);
 }
 
 function findConfig (bankId, bankConfig) {

@@ -16,7 +16,7 @@ module.exports = function(grunt) {
     casperjs: {
         options: {
           async: {
-            parallel: true
+            parallel: false
           },
           casperjsOptions: ['--ignore-ssl-errors=true']
 
