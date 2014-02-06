@@ -1,4 +1,5 @@
 # Node-tupas
+[![Build Status](https://travis-ci.org/reaktor/node-tupas.png?branch=master)](https://travis-ci.org/reaktor/node-tupas)
 
 Configurable Node.js module for TUPAS identification. Includes test
 configurations for Tapiola, Nordea, DanskeBank, Handelsbanken, OP,
