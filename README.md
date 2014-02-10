@@ -9,6 +9,8 @@ Currently requires Express.
 
 ## About
 
+![Reaktor](public/images/reaktor_logo_195x85px.jpg "Reaktor")
+
 Made at [Reaktor](http://reaktor.fi).
 
 Apply for juicy positions at [reaktor.fi/careers](http://reaktor.fi/careers).
