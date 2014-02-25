@@ -200,7 +200,7 @@ function generateMacForResponse (queryParams, bankConfig) {
     queryParams.B02K_USERNAME,
     bank.checksumKey
   ]), function (val) {
-    return unescape(val).replace('+', ' ');
+    return unescape(val).replace(/\+/g, ' ');
   });
 
   return generateMac(macParams);
