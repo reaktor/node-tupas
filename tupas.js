@@ -116,6 +116,8 @@ function mergeWithDefaults (bankOpts) {
 
 function bindReturnUrlsToHandler (tupas, handler) {
   handler.post(okPath, ok(tupas)); // Danske Bank uses POST.
+  handler.post(cancelPath, cancel(tupas));
+  handler.post(rejectPath, reject(tupas));
   handler.get(okPath, ok(tupas));  // Others use GET.
   handler.get(cancelPath, cancel(tupas));
   handler.get(rejectPath, reject(tupas));
