@@ -1,17 +1,19 @@
-var crypto = require("crypto")
-  , events = require('events')
-  , _ = require('underscore')._
-  , express = require('express')
-  , config = require('./config.json');
+"use strict";
+/*jslint node:true, indent: 2, nomen: true */
+var crypto = require("crypto"),
+  events = require('events'),
+  _ = require('underscore')._,
+  express = require('express'),
+  config = require('./config.json');
 
-var tupasPath = "/tupas"
-  , cancelPath = tupasPath + "/cancel"
-  , okPath = tupasPath + "/ok"
-  , rejectPath = tupasPath + "/reject";
+var tupasPath = "/tupas",
+  cancelPath = tupasPath + "/cancel",
+  okPath = tupasPath + "/ok",
+  rejectPath = tupasPath + "/reject";
 
-var SHA256 = "03"
-  , TUPAS_MESSAGE_TYPE = "701"
-  , LANG_CODES = ['FI', 'SV', 'EN'];
+var SHA256 = "03",
+  TUPAS_MESSAGE_TYPE = "701",
+  LANG_CODES = ['FI', 'SV', 'EN'];
 
 var tupasFormTemplate = _.template(
                          '<form id="<%= id %>-form" method="POST" action="<%= bankAuthUrl %>" class="tupas-button">'+
@@ -45,14 +47,23 @@ var tupasFormTemplate = _.template(
                          '</script>' +
                          '</form>');
 
+function requireArgument(argValue, argName) {
+  if (typeof argValue === "undefined" || argValue === null) {
+    throw new Error("Missing required argument " + argName + ".");
+  }
+}
+
 exports.create = function (globalOpts, bankOpts) {
   requireArgument(globalOpts.appHandler, "globalOpts.appHandler");
   requireArgument(globalOpts.hostUrl, "globalOpts.hostUrl");
 
-  var tupas = Object.create(events.EventEmitter.prototype);
-  var banks = updatedBankConfigsWith(bankOpts);
-  var vendorOpts = _.extend({}, globalOpts,
-    { returnUrls : returnUrls(globalOpts.hostUrl) });
+  var tupas = Object.create(events.EventEmitter.prototype),
+    banks = updatedBankConfigsWith(bankOpts),
+    vendorOpts = _.extend(
+      {},
+      globalOpts,
+      { returnUrls : returnUrls(globalOpts.hostUrl) }
+    );
 
   bindReturnUrlsToHandler(tupas, vendorOpts.appHandler);
   vendorOpts.appHandler.use(express.static(__dirname + '/public'));
@@ -75,12 +86,6 @@ exports.create = function (globalOpts, bankOpts) {
 
   return tupas;
 };
-
-function requireArgument(argValue, argName) {
-  if (typeof argValue === "undefined" || argValue === null) {
-    throw "Missing required argument " + argName + ".";
-  }
-}
 
 function returnUrls (hostUrl) {
   return {
@@ -125,9 +130,9 @@ function bindReturnUrlsToHandler (tupas, handler) {
 
 function buildParamsForRequest (bank, languageCode, returnUrls, requestId) {
   if (invalidLangCode(languageCode))
-    throw "Unsupported language code: " + languageCode + ".";
+    throw new Error("Unsupported language code: " + languageCode + ".");
   if (requestId.length > 20)
-    throw "Request id too long: " + requestId + ".";
+    throw new Error("Request id too long: " + requestId + ".");
 
   var params = {
     name : bank.name,
