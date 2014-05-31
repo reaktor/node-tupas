@@ -78,7 +78,7 @@ exports.create = function (globalOpts, bankOpts) {
 
 function requireArgument(argValue, argName) {
   if (typeof argValue === "undefined" || argValue === null) {
-    throw "Missing required argument " + argName + ".";
+    throw new Error("Missing required argument " + argName + ".");
   }
 }
 
@@ -125,9 +125,9 @@ function bindReturnUrlsToHandler (tupas, handler) {
 
 function buildParamsForRequest (bank, languageCode, returnUrls, requestId) {
   if (invalidLangCode(languageCode))
-    throw "Unsupported language code: " + languageCode + ".";
+    throw new Error("Unsupported language code: " + languageCode + ".");
   if (requestId.length > 20)
-    throw "Request id too long: " + requestId + ".";
+    throw new Error("Request id too long: " + requestId + ".");
 
   var params = {
     name : bank.name,
