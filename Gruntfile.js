@@ -40,5 +40,6 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('default', ['express-server', 'casperjs', 'mochaTest']);
+  grunt.registerTask('test', ['default']);
 
 };
