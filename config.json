@@ -116,7 +116,19 @@
         "number" : "420",
         "vendorId" : "1111111111111",
         "checksumKey": "11111111111111111111"
-      }
+      },
 
+      {
+        "id" : "poppankki",
+        "name" : "POPPankki",
+        "authUrl" : "https://tupas.poppankki.fi",
+        "version" : "0002",
+        "keyVersion" : "0001",
+        "idType" : "01",
+        "imgPath" : "images/logo_pop.png",
+        "number" : "430",
+        "vendorId" : "1111111111111",
+        "checksumKey": "11111111111111111111"
+      }
     ]
 }
