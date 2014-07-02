@@ -32,3 +32,22 @@ casper.test.begin('POP Pankki Authentication', 1, function(test) {
   });
 });
 
+casper.test.begin("Test auth cancelation", 1, function(test) {
+  casper.start('https://localhost:' + config.port, function() {
+    this.click("#poppankki-login");
+  });
+
+  casper.then(function() {
+    this.click('button.CancelButton');
+  });
+
+  casper.waitForSelector('#cancel', function() {
+    test.assertExists("#cancel");
+    this.echo("Succesfully canceled authentication");
+  }, function(){}, 10000);
+
+  casper.run(function() {
+    test.done();
+  });
+
+});
