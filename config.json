@@ -103,7 +103,32 @@
         "number" : "390",
         "vendorId" : "SPANKKITUPAS",
         "checksumKey": "SPANKKI"
-      }
+      },
 
+      {
+        "id" : "saastopankki",
+        "name" : "Säästöpankki",
+        "authUrl" : "https://tupas.saastopankki.fi",
+        "version" : "0002",
+        "keyVersion" : "0001",
+        "idType" : "01",
+        "imgPath" : "images/logo_sp.png",
+        "number" : "420",
+        "vendorId" : "1111111111111",
+        "checksumKey": "11111111111111111111"
+      },
+
+      {
+        "id" : "poppankki",
+        "name" : "POPPankki",
+        "authUrl" : "https://tupas.poppankki.fi",
+        "version" : "0002",
+        "keyVersion" : "0001",
+        "idType" : "01",
+        "imgPath" : "images/logo_pop.png",
+        "number" : "430",
+        "vendorId" : "1111111111111",
+        "checksumKey": "11111111111111111111"
+      }
     ]
 }

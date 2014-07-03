@@ -3,7 +3,7 @@
 
 Configurable Node.js module for TUPAS identification. Includes test
 configurations for Tapiola, Nordea, DanskeBank, Handelsbanken, OP,
-Aktia, Ålandsbanken and S-Pankki.
+Aktia, Ålandsbanken, S-Pankki, Säästöpankki and POP Pankki.
 
 Currently requires Express.
 
@@ -94,7 +94,8 @@ var params = tupas.buildRequestParams('nordea', 'FI', requestId);
 ```javascript
 var banks = tupas.banks
 // => ['tapiola', 'danskebank', 'handelsbanken', 'nordea',
-//     'op', 'aktia', 'alandsbanken', 'spankki', 'my-new-bank']
+//     'op', 'aktia', 'alandsbanken', 'spankki', 
+//     'saastopankki', 'poppankki', 'my-new-bank']
 ```
 
 ### Response handling
