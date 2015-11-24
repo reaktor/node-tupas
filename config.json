@@ -2,19 +2,6 @@
 
     "banks" : [
       {
-        "id" : "tapiola",
-        "name" : "Tapiola",
-        "authUrl" : "https://pankki.tapiola.fi/service/identify",
-        "version" : "0002",
-        "keyVersion" : "0001",
-        "idType" : "01",
-        "imgPath" : "images/logo_tapiola.gif",
-        "number" : "360",
-        "vendorId" : "TAPTUPASID",
-        "checksumKey": "PAPAKAIJU"
-      },
-
-      {
         "id" : "danskebank",
         "name" : "DanskeBank",
         "authUrl" : "https://verkkopankki.sampopankki.fi/SP/tupaha/TupahaApp",
