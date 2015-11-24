@@ -56,14 +56,14 @@
       {
         "id" : "aktia",
         "name" : "Aktia",
-        "authUrl" : "https://tunnistepalvelu.samlink.fi/TupasTunnistus/TupasServlet",
-        "version" : "0002",
+        "authUrl" : "https://auth.aktia.fi/tupastest",
+        "version" : "0003",
         "keyVersion" : "0001",
-        "idType" : "01",
+        "idType" : "02",
         "imgPath" : "images/logo_sppop.gif",
-        "number" : "400",
-        "vendorId" : "1111111111111",
-        "checksumKey": "11111111111111111111"
+        "number" : "410",
+        "vendorId" : "3333333333333",
+        "checksumKey": "1234567890123456789012345678901234567890123456789012345678901234"
       },
 
       {
