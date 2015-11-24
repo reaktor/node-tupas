@@ -10,21 +10,27 @@
     "url" : "http://www.reaktor.fi"
   },
 
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reaktor/node-tupas.git"
+  },
+
   "license": "MIT",
   "dependencies": {
-    "express": "3.4.8",
-    "underscore": "1.5.2"
+    "express": "4.13.3",
+    "underscore": "1.8.3"
   },
   "devDependencies": {
-    "moment": "2.5.0",
-    "grunt": "~0.4.2",
-    "grunt-express": "~1.2.1",
-    "grunt-casperjs": "~1.4.0",
-    "grunt-mocha-test": "~0.8.2",
-    "supertest": "~0.9.0"
+    "moment": "2.10.6",
+    "grunt": "0.4.5",
+    "grunt-express": "1.4.0",
+    "grunt-casperjs": "2.1.0",
+    "grunt-mocha-test": "0.12.7",
+    "mocha": "2.3.4",
+    "supertest": "1.1.0"
   },
 
   "scripts": {
-  "test": "grunt --verbose"
-}
+    "test": "grunt --verbose"
+  }
 }
