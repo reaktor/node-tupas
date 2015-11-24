@@ -30,7 +30,7 @@
       {
         "id" : "nordea",
         "name" : "Nordea",
-        "authUrl" : "https://solo3.nordea.fi/cgi-bin/SOLO3011",
+        "authUrl" : "https://tupas.nordea.fi/cgi-bin/SOLO3011",
         "version" : "0002",
         "keyVersion" : "0001",
         "idType" : "01",
