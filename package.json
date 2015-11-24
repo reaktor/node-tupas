@@ -18,7 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "express": "3.4.8",
-    "underscore": "1.5.2"
+    "underscore": "1.8.3"
   },
   "devDependencies": {
     "moment": "2.10.6",
