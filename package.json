@@ -10,6 +10,11 @@
     "url" : "http://www.reaktor.fi"
   },
 
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reaktor/node-tupas.git"
+  },
+
   "license": "MIT",
   "dependencies": {
     "express": "3.4.8",
