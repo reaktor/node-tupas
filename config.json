@@ -20,7 +20,7 @@
         "authUrl" : "https://tunnistepalvelu.samlink.fi/TupasTunnistus/SHBtupas.html",
         "version" : "0002",
         "keyVersion" : "0001",
-        "idType" : "01",
+        "idType" : "02",
         "imgPath" : "images/logo_handelsbanken.gif",
         "number" : "310",
         "vendorId" : "1111111111111",
