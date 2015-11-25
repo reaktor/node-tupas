@@ -9,11 +9,11 @@ Currently requires Express.
 
 ## About
 
-![Reaktor](public/images/reaktor_logo_195x85px.jpg "Reaktor")
+![Reaktor](public/images/logo_reaktor.png "Reaktor")
 
-Made at [Reaktor](http://reaktor.fi).
+Made at [Reaktor](http://reaktor.com).
 
-Apply for juicy positions at [reaktor.fi/careers](http://reaktor.fi/careers).
+Apply for juicy positions at [reaktor.fi/careers](http://reaktor.com/careers).
 
 ## Install
 
