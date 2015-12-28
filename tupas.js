@@ -1,6 +1,7 @@
 "use strict";
 /*jslint node:true, indent: 2, nomen: true */
 var crypto = require("crypto"),
+  url = require("url"),
   events = require('events'),
   _ = require('underscore')._,
   express = require('express'),
@@ -56,6 +57,8 @@ function requireArgument(argValue, argName) {
 exports.create = function (globalOpts, bankOpts) {
   requireArgument(globalOpts.appHandler, "globalOpts.appHandler");
   requireArgument(globalOpts.hostUrl, "globalOpts.hostUrl");
+  var contextPath = url.parse(globalOpts.hostUrl).pathname;
+  if (contextPath === '/') contextPath = '';
 
   var tupas = Object.create(events.EventEmitter.prototype),
     banks = updatedBankConfigsWith(bankOpts),
@@ -65,7 +68,7 @@ exports.create = function (globalOpts, bankOpts) {
       { returnUrls : returnUrls(globalOpts.hostUrl) }
     );
 
-  bindReturnUrlsToHandler(tupas, vendorOpts.appHandler);
+  bindReturnUrlsToHandler(tupas, vendorOpts.appHandler, contextPath);
   vendorOpts.appHandler.use(express.static(__dirname + '/public'));
 
   tupas.banks = _.pluck(banks, 'id');
@@ -119,13 +122,13 @@ function mergeWithDefaults (bankOpts) {
   });
 }
 
-function bindReturnUrlsToHandler (tupas, handler) {
-  handler.post(okPath, ok(tupas)); // Danske Bank uses POST.
-  handler.post(cancelPath, cancel(tupas));
-  handler.post(rejectPath, reject(tupas));
-  handler.get(okPath, ok(tupas));  // Others use GET.
-  handler.get(cancelPath, cancel(tupas));
-  handler.get(rejectPath, reject(tupas));
+function bindReturnUrlsToHandler (tupas, handler, contextPath) {
+  handler.post(contextPath + okPath, ok(tupas)); // Danske Bank uses POST.
+  handler.post(contextPath + cancelPath, cancel(tupas));
+  handler.post(contextPath + rejectPath, reject(tupas));
+  handler.get(contextPath + okPath, ok(tupas));  // Others use GET.
+  handler.get(contextPath + cancelPath, cancel(tupas));
+  handler.get(contextPath + rejectPath, reject(tupas));
 }
 
 function buildParamsForRequest (bank, languageCode, returnUrls, requestId) {
