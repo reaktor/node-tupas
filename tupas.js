@@ -18,10 +18,10 @@ var SHA256 = "03",
 
 var tupasFormTemplate = _.template(
                          '<form id="<%= id %>-form" method="POST" action="<%= bankAuthUrl %>" class="tupas-button">'+
-                         '<div id="<%= id %>-login" style="cursor: pointer">' +
+                         '<button type="submit" id="<%= id %>-login">' +
                          '<div class="bank-login-image"><img src="<%= imgPath %>" alt="<%= name %>"></div>' +
-                         '<div class="bank-login-name"><a href="#"><%= name %></a></div>' +
-                         '</div>' +
+                         '<div class="bank-login-name"><%= name %></div>' +
+                         '</button>' +
                          '<input name="A01Y_ACTION_ID" type="hidden" value="<%= messageType %>">' +
                          '<input name="A01Y_VERS" type="hidden" value="<%= version %>">' +
                          '<input name="A01Y_RCVID" type="hidden" value="<%= vendorId %>">' +
@@ -34,18 +34,6 @@ var tupasFormTemplate = _.template(
                          '<input name="A01Y_KEYVERS" type="hidden" value="<%= keyVersion %>">' +
                          '<input name="A01Y_ALG" type="hidden" value="<%= algorithmType %>">' +
                          '<input name="A01Y_MAC" type="hidden" value="<%= mac %>">' +
-                         '<script>' +
-                         'var bankLogin = document.getElementById("<%= id %>-login");' +
-                         'var clickHandler = function() {' +
-                            'document.getElementById("<%= id %>-form").submit();' +
-                          '};' +
-                         'if(bankLogin.addEventListener) {' +
-                           'bankLogin.addEventListener("click", clickHandler, false);' +
-                          '}'+
-                         'else if (bankLogin.attachEvent) {' +
-                           'bankLogin.attachEvent("onclick", clickHandler);' +
-                         '}' +
-                         '</script>' +
                          '</form>');
 
 function requireArgument(argValue, argName) {
