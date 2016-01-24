@@ -30,7 +30,7 @@ Run tests with grunt.
 ```javascript
 var generalOptions = {
   appHandler: app, // an Express-like application
-  hostUrl: 'http://domain.here.com:port[/path]', // required for return URLs, and binding to optional /path
+  hostUrl: 'https://domain.here.com:port[/path]', // required for return URLs, and binding to optional /path
 };
 
 var tupas = require('tupas').create(generalOptions);

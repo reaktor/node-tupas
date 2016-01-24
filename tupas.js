@@ -1,6 +1,7 @@
 "use strict";
 /*jslint node:true, indent: 2, nomen: true */
-var crypto = require("crypto"),
+var assert = require('assert'),
+  crypto = require("crypto"),
   url = require("url"),
   events = require('events'),
   _ = require('underscore')._,
@@ -35,16 +36,32 @@ var tupasFormTemplate = _.template(
                          '<input name="A01Y_MAC" type="hidden" value="<%= mac %>">' +
                          '</form>');
 
-function requireArgument(argValue, argName) {
-  if (typeof argValue === "undefined" || argValue === null) {
-    throw new Error("Missing required argument " + argName + ".");
-  }
+// An Express-like app is fine, but only post() and get() are used from it.
+function isValidAppHandler(handler) {
+    return _.isObject(handler) &&
+        _.every([handler.post, handler.get], _.isFunction);
+}
+
+// The TUPAS spec gives the impression that the length must be exactly 20 chars, but
+// it seems that in practice this can be considered as the max length, shorter ones are
+// allowed as well (not sure how well one can rely on this, though). Allowed characters
+// are not defined by the spec, so not being too strict here either.
+function isValidRequestId(id) {
+  return _.isString(id) && id.length <= 20;
+}
+
+function isValidLangCode(langCode) {
+  return _.contains(LANG_CODES, langCode);
 }
 
 exports.create = function (globalOpts, bankOpts) {
-  requireArgument(globalOpts.appHandler, "globalOpts.appHandler");
-  requireArgument(globalOpts.hostUrl, "globalOpts.hostUrl");
-  var contextPath = url.parse(globalOpts.hostUrl).pathname;
+  assert(isValidAppHandler(globalOpts.appHandler), "globalOpts.appHandler must be a valid app handler");
+  assert(_.isString(globalOpts.hostUrl), "globalOpts.hostUrl must be a valid URL");
+
+  var parsedUrl = url.parse(globalOpts.hostUrl);
+  assert(parsedUrl.protocol === "https:", "globalOpts.hostUrl must use https protocol");
+
+  var contextPath = parsedUrl.pathname;
   if (contextPath === '/') contextPath = '';
 
   var tupas = Object.create(events.EventEmitter.prototype),
@@ -118,10 +135,9 @@ function bindReturnUrlsToHandler (tupas, handler, contextPath) {
 }
 
 function buildParamsForRequest (bank, languageCode, returnUrls, requestId) {
-  if (invalidLangCode(languageCode))
-    throw new Error("Unsupported language code: " + languageCode + ".");
-  if (requestId.length > 20)
-    throw new Error("Request id too long: " + requestId + ".");
+  assert(!_.isEmpty(bank), "Invalid bank given");
+  assert(isValidRequestId(requestId), "Invalid requestId, it must be (max) 20 chars long.");
+  assert(isValidLangCode(languageCode), "Unsupported language code: " + languageCode + ".");
 
   var params = {
     name : bank.name,
@@ -145,10 +161,6 @@ function buildParamsForRequest (bank, languageCode, returnUrls, requestId) {
   params.mac = generateMacForRequest (params);
 
   return params;
-}
-
-function invalidLangCode(langCode) {
-  return !_.contains(LANG_CODES, langCode);
 }
 
 function findConfig (bankId, bankConfig) {
