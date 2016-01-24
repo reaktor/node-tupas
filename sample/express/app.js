@@ -45,6 +45,8 @@ app.use(express.static(__dirname + '/../css'))
 app.use(express.static(__dirname + '/../../public'));
 
 app.get('/', function (req, res) {
+  // requestId length should be 20 as per TUPAS spec, but seems that
+  // shorter ones are accepted.
   var now = moment().format('YYYYMMDDhhmmss');
   var requestId = now + "123456";
 
