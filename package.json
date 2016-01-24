@@ -3,33 +3,29 @@
   "version": "0.1.6",
   "description": "A module for TUPAS identification.",
   "main": "tupas.js",
-  "homepage" : "https://github.com/reaktor/node-tupas",
-
+  "homepage": "https://github.com/reaktor/node-tupas",
   "author": {
-    "name" : "Reaktor",
-    "url" : "http://www.reaktor.fi"
+    "name": "Reaktor",
+    "url": "http://www.reaktor.fi"
   },
-
   "repository": {
     "type": "git",
     "url": "https://github.com/reaktor/node-tupas.git"
   },
-
   "license": "MIT",
   "dependencies": {
     "underscore": "1.8.3"
   },
   "devDependencies": {
     "express": "4.13.3",
-    "moment": "2.10.6",
     "grunt": "0.4.5",
-    "grunt-express": "1.4.0",
     "grunt-casperjs": "2.1.0",
+    "grunt-express": "1.4.0",
     "grunt-mocha-test": "0.12.7",
     "mocha": "2.3.4",
+    "moment": "2.10.6",
     "supertest": "1.1.0"
   },
-
   "scripts": {
     "test": "grunt --verbose"
   }
