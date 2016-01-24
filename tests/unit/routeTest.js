@@ -1,5 +1,5 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-var app = require("../../sample/app");
+var app = require("../../sample/express/app");
 var request = require('supertest');
 
 describe('POST tupas/ok', function(){
