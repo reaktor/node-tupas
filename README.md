@@ -148,7 +148,11 @@ tupas.on('reject', function (request, response) {
 });
 ```
 
-### Sample application
+### Sample applications
 
-See `sample/app.js` for a simple usage example with Express. Run the
-sample app locally with `node sample/start-sample.js`.
+Examples of host applications are provided:
+
+- See `sample/express/app.js` for a simple usage example with [Express](http://expressjs.com). Run the
+sample app locally with `node sample/express/start-sample.js`.
+- See `sample/hapi/tupas-plugin.js` for a simple usage example with [Hapi](http://hapijs.com). Run the sample app
+locally with `node sample/hapi/start-sample.js`.
