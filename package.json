@@ -22,6 +22,8 @@
     "grunt-casperjs": "2.1.0",
     "grunt-express": "1.4.0",
     "grunt-mocha-test": "0.12.7",
+    "hapi": "12.1.0",
+    "inert": "3.2.0",
     "mocha": "2.3.4",
     "moment": "2.10.6",
     "supertest": "1.1.0"
