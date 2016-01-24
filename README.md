@@ -156,3 +156,10 @@ Examples of host applications are provided:
 sample app locally with `node sample/express/start-sample.js`.
 - See `sample/hapi/tupas-plugin.js` for a simple usage example with [Hapi](http://hapijs.com). Run the sample app
 locally with `node sample/hapi/start-sample.js`.
+
+## Resources
+
+More information about TUPAS:
+
+- "Tupas Identification Service" at FFI https://www.fkl.fi/en/themes/e-services/tupas/Pages/default.aspx
+- "Finnish Tupas" at Signicat Support https://support.signicat.com/display/S2/Finnish+Tupas
