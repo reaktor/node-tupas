@@ -17,10 +17,10 @@
 
   "license": "MIT",
   "dependencies": {
-    "express": "4.13.3",
     "underscore": "1.8.3"
   },
   "devDependencies": {
+    "express": "4.13.3",
     "moment": "2.10.6",
     "grunt": "0.4.5",
     "grunt-express": "1.4.0",

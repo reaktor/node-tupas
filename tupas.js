@@ -4,7 +4,6 @@ var crypto = require("crypto"),
   url = require("url"),
   events = require('events'),
   _ = require('underscore')._,
-  express = require('express'),
   config = require('./config.json');
 
 var tupasPath = "/tupas",
@@ -57,7 +56,6 @@ exports.create = function (globalOpts, bankOpts) {
     );
 
   bindReturnUrlsToHandler(tupas, vendorOpts.appHandler, contextPath);
-  vendorOpts.appHandler.use(express.static(__dirname + '/public'));
 
   tupas.banks = _.pluck(banks, 'id');
   tupas.requestMac = generateMacForRequest;

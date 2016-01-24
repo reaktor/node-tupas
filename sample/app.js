@@ -40,6 +40,10 @@ var sslOptions = {
 
 app.use(express.static(__dirname + '/css'))
 
+// When using this tupas package normally, this would be something like
+// app.use(express.static(__dirname + '/node_modules/tupas/public'));
+app.use(express.static(__dirname + '/../public'));
+
 app.get('/', function (req, res) {
   var now = moment().format('YYYYMMDDhhmmss');
   var requestId = now + "123456";
