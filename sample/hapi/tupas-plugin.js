@@ -42,11 +42,12 @@ exports.register = (server, options, next) => {
     };
 
     var globalOpts = {
-        appHandler,
         hostUrl: server.info.uri,
     };
 
     var tupas = tupasCreator.create(globalOpts);
+
+    tupas.bindHandlers(appHandler);
 
     tupas.on('success', function (req, reply) {
         reply(`

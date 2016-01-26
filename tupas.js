@@ -55,14 +55,8 @@ function isValidLangCode(langCode) {
 }
 
 exports.create = function (globalOpts, bankOpts) {
-  assert(isValidAppHandler(globalOpts.appHandler), "globalOpts.appHandler must be a valid app handler");
   assert(_.isString(globalOpts.hostUrl), "globalOpts.hostUrl must be a valid URL");
-
-  var parsedUrl = url.parse(globalOpts.hostUrl);
-  assert(parsedUrl.protocol === "https:", "globalOpts.hostUrl must use https protocol");
-
-  var contextPath = parsedUrl.pathname;
-  if (contextPath === '/') contextPath = '';
+  assert(url.parse(globalOpts.hostUrl).protocol === "https:", "globalOpts.hostUrl must use https protocol");
 
   var tupas = Object.create(events.EventEmitter.prototype),
     banks = updatedBankConfigsWith(bankOpts),
@@ -72,12 +66,19 @@ exports.create = function (globalOpts, bankOpts) {
       { returnUrls : returnUrls(globalOpts.hostUrl) }
     );
 
-  bindReturnUrlsToHandler(tupas, vendorOpts.appHandler, contextPath);
-
   tupas.banks = _.pluck(banks, 'id');
   tupas.requestMac = generateMacForRequest;
   tupas.responseMac = function (params) {
     return generateMacForResponse(params, banks)
+  };
+
+  tupas.bindHandlers = function (appHandler) {
+    assert(isValidAppHandler(appHandler), "appHandler must be valid");
+
+    var contextPath = url.parse(globalOpts.hostUrl).pathname;
+    if (contextPath === '/') contextPath = '';
+
+    bindReturnUrlsToHandler(tupas, appHandler, contextPath);
   };
 
   tupas.buildRequestParams = function (bankId, languageCode, requestId) {
@@ -89,6 +90,10 @@ exports.create = function (globalOpts, bankOpts) {
     var formParams = tupas.buildRequestParams(bankId, languageCode, requestId);
     return tupasFormTemplate(formParams);
   };
+
+  if (globalOpts.appHandler) {
+    tupas.bindHandlers(globalOpts.appHandler);
+  }
 
   return tupas;
 };

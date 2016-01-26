@@ -5,6 +5,9 @@ Configurable Node.js module for TUPAS identification. Includes test
 configurations for Nordea, DanskeBank, Handelsbanken, OP,
 Aktia, Ålandsbanken, S-Pankki, Säästöpankki and POP Pankki.
 
+Can be used as a complete solution (server & client) or client-side only
+(for form rendering).
+
 ## About
 
 ![Reaktor](public/images/logo_reaktor.png "Reaktor")
@@ -29,11 +32,18 @@ Run tests with grunt.
 
 ```javascript
 var generalOptions = {
-  appHandler: app, // an Express-like application
   hostUrl: 'https://domain.here.com:port[/path]', // required for return URLs, and binding to optional /path
+  appHandler: app // optional, equals to calling tupas.bindHandlers() separately
 };
 
 var tupas = require('tupas').create(generalOptions);
+
+// Bind the tupas internal events and routes to the given 'app', where 'app' is
+// an Express-like application. This is only needed when used on server-side.
+// Client-side operations, such as form rendering, are available without
+// this.
+// Don't do this if you gave 'app' to create() in generalOptions!
+tupas.bindHandlers(app);
 ```
 
 `appHandler` must be an Express-like application object. For the purposes of this package,
