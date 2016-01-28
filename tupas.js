@@ -19,7 +19,7 @@ var SHA256 = "03",
 var tupasFormTemplate = _.template(
                          '<form id="<%= id %>-form" method="POST" action="<%= bankAuthUrl %>" class="tupas-button">'+
                          '<button type="submit" id="<%= id %>-login">' +
-                         '<div class="bank-login-image"><img src="<%= imgPath %>" alt="<%= name %>"></div>' +
+                         '<div class="bank-login-image"><img src="<%= imgPath %>" alt=""></div>' +
                          '<div class="bank-login-name"><%= name %></div>' +
                          '</button>' +
                          '<input name="A01Y_ACTION_ID" type="hidden" value="<%= messageType %>">' +
