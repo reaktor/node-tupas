@@ -38,8 +38,7 @@ var tupasFormTemplate = _.template(
 
 // An Express-like app is fine, but only post() and get() are used from it.
 function isValidAppHandler(handler) {
-    return _.isObject(handler) &&
-        _.every([handler.post, handler.get], _.isFunction);
+  return _.isObject(handler) && _.every([handler.post, handler.get], _.isFunction);
 }
 
 // The TUPAS spec gives the impression that the length must be exactly 20 chars, but

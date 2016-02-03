@@ -72,7 +72,7 @@ describe("create(generalOpts)", function () {
 
       assert.throws(function() {
         create(generalOpts);
-      }, /valid app handler/);
+      }, /appHandler/);
     });
   });
 
