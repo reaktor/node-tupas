@@ -171,5 +171,5 @@ locally with `node sample/hapi/start-sample.js`.
 
 More information about TUPAS:
 
-- "Tupas Identification Service" at FFI https://www.fkl.fi/en/themes/e-services/tupas/Pages/default.aspx
+- "Tupas Identification Service" at FFI http://www.finanssiala.fi/en/payment-services/Pages/Technical-documentation.aspx
 - "Finnish Tupas" at Signicat Support https://support.signicat.com/display/S2/Finnish+Tupas
