@@ -218,7 +218,7 @@ function generateMacForResponse (queryParams, bankConfig) {
 
 function generateMac(params) {
   var joinedParams = params.join("&") + "&";
-  return crypto.createHash('sha256').update(joinedParams).digest('hex').toUpperCase();
+  return crypto.createHash('sha256').update(joinedParams, 'binary').digest('hex').toUpperCase();
 }
 
 function ok (tupas) {
