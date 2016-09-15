@@ -116,6 +116,19 @@
         "number" : "430",
         "vendorId" : "1111111111111",
         "checksumKey": "11111111111111111111"
+      },
+
+      {
+        "id": "omasaastopankki",
+        "name" : "OmaSäästöpankki",
+        "authUrl" : "https://tupas.omasp.fi",
+        "version" : "0002",
+        "keyVersion" : "0001",
+        "idType" : "02",
+        "imgPath" : "/images/logo_omasp.png",
+        "number" : "440",
+        "vendorId": "1111111111111",
+        "checksumKey": "11111111111111111111"
       }
     ]
 }
