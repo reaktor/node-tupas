@@ -1,22 +1,25 @@
 var x = require('casper').selectXPath;
 var config = require("../config.json");
+
+casper.options.waitTimeout = 10000;
+
 casper.test.begin("Aktia Authentication", 1, function(test) {
-  casper.start('https://localhost:' + config.port , function() {
+  var loginForm = 'form[name="Login"]';
+  var verificationForm = 'form[name="Login"]';
+
+  casper.start('https://localhost:' + config.port, function() {
     this.click("#aktia-login");
   });
 
-
-  casper.then(function() {
-
-    this.fill('form[name="Login"]', {
+  casper.waitForSelector(loginForm, function() {
+    this.fill(loginForm, {
       "IDToken1" : "12345678",
       "IDToken2" : "123456"
     }, true);
-
   });
 
-  casper.then(function(){
-    this.fill('form[name="Login"]', {
+  casper.waitForSelector(verificationForm, function() {
+    this.fill(verificationForm, {
       "IDToken1" : '1234'
     }, true);
   });
@@ -28,11 +31,10 @@ casper.test.begin("Aktia Authentication", 1, function(test) {
   casper.waitForSelector('#success', function() {
     test.assertExists("#success");
     this.echo("Succesfully authenticated with Aktia");
-  }, function(){}, 10000);
-
+  });
 
   casper.run(function() {
-     test.done();
+    test.done();
   });
 });
 
@@ -48,10 +50,9 @@ casper.test.begin("Test auth cancelation", 1, function(test) {
   casper.waitForSelector('#cancel', function() {
     test.assertExists("#cancel");
     this.echo("Succesfully canceled authentication");
-  }, function(){}, 10000);
+  });
 
   casper.run(function() {
     test.done();
   });
-
 });

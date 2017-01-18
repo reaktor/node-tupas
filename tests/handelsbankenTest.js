@@ -1,12 +1,15 @@
 var config = require("../config.json");
 
+casper.options.waitTimeout = 10000;
+
 casper.test.begin("Handelsbanken Authentication", 1, function(test) {
+  var verificationForm = 'form[name="SecurityKeyForm"]';
+
   casper.start('https://localhost:' + config.port, function() {
     this.click("#handelsbanken-login");
   });
 
   casper.then(function() {
-
     this.evaluate(function() {
       document.getElementById('focusField').value = '11111111';
     });
@@ -16,11 +19,10 @@ casper.test.begin("Handelsbanken Authentication", 1, function(test) {
     });
 
     this.click('button[type="submit"]');
-
   });
 
-  casper.then(function(){
-    this.fill('form[name="SecurityKeyForm"]', {
+  casper.waitForSelector(verificationForm, function() {
+    this.fill(verificationForm, {
       "SECURITYKEY" : '123456'
     }, true);
   });
@@ -32,8 +34,7 @@ casper.test.begin("Handelsbanken Authentication", 1, function(test) {
   casper.waitForSelector('#success', function() {
     test.assertExists("#success");
     this.echo("Succesfully authenticated with Handelsbanken");
-  }, function(){}, 10000);
-
+  });
 
   casper.run(function() {
     test.done();
