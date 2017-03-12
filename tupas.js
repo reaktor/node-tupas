@@ -1,19 +1,19 @@
-"use strict";
+'use strict';
 /*jslint node:true, indent: 2, nomen: true */
-var crypto = require("crypto"),
-  url = require("url"),
+var crypto = require('crypto'),
+  url = require('url'),
   events = require('events'),
   _ = require('underscore')._,
   express = require('express'),
   config = require('./config.json');
 
-var tupasPath = "/tupas",
-  cancelPath = tupasPath + "/cancel",
-  okPath = tupasPath + "/ok",
-  rejectPath = tupasPath + "/reject";
+var tupasPath = '/tupas',
+  cancelPath = tupasPath + '/cancel',
+  okPath = tupasPath + '/ok',
+  rejectPath = tupasPath + '/reject';
 
-var SHA256 = "03",
-  TUPAS_MESSAGE_TYPE = "701",
+var SHA256 = '03',
+  TUPAS_MESSAGE_TYPE = '701',
   LANG_CODES = ['FI', 'SV', 'EN'];
 
 var tupasFormTemplate = _.template(
@@ -49,14 +49,14 @@ var tupasFormTemplate = _.template(
                          '</form>');
 
 function requireArgument(argValue, argName) {
-  if (typeof argValue === "undefined" || argValue === null) {
-    throw new Error("Missing required argument " + argName + ".");
+  if (typeof argValue === 'undefined' || argValue === null) {
+    throw new Error('Missing required argument ' + argName + '.');
   }
 }
 
 exports.create = function (globalOpts, bankOpts) {
-  requireArgument(globalOpts.appHandler, "globalOpts.appHandler");
-  requireArgument(globalOpts.hostUrl, "globalOpts.hostUrl");
+  requireArgument(globalOpts.appHandler, 'globalOpts.appHandler');
+  requireArgument(globalOpts.hostUrl, 'globalOpts.hostUrl');
   var contextPath = url.parse(globalOpts.hostUrl).pathname;
   if (contextPath === '/') contextPath = '';
 
@@ -65,7 +65,7 @@ exports.create = function (globalOpts, bankOpts) {
     vendorOpts = _.extend(
       {},
       globalOpts,
-      { returnUrls : returnUrls(globalOpts.hostUrl) }
+      { returnUrls: returnUrls(globalOpts.hostUrl) }
     );
 
   bindReturnUrlsToHandler(tupas, vendorOpts.appHandler, contextPath);
@@ -74,7 +74,7 @@ exports.create = function (globalOpts, bankOpts) {
   tupas.banks = _.pluck(banks, 'id');
   tupas.requestMac = generateMacForRequest;
   tupas.responseMac = function (params) {
-    return generateMacForResponse(params, banks)
+    return generateMacForResponse(params, banks);
   };
 
   tupas.buildRequestParams = function (bankId, languageCode, requestId) {
@@ -90,7 +90,7 @@ exports.create = function (globalOpts, bankOpts) {
   return tupas;
 };
 
-function returnUrls (hostUrl) {
+function returnUrls(hostUrl) {
   return {
     ok: hostUrl + okPath,
     cancel: hostUrl + cancelPath,
@@ -98,31 +98,31 @@ function returnUrls (hostUrl) {
   };
 }
 
-function updatedBankConfigsWith (bankOpts) {
+function updatedBankConfigsWith(bankOpts) {
   var updatedDefaults = mergeWithDefaults(bankOpts);
   var defaultBankIds = _.pluck(updatedDefaults, 'id');
   var newBanks = _.reject(bankOpts, function (bank) {
-    return _.contains(defaultBankIds, bank.id)
+    return _.contains(defaultBankIds, bank.id);
   });
 
   return updatedDefaults.concat(newBanks);
 }
 
-function mergeWithDefaults (bankOpts) {
+function mergeWithDefaults(bankOpts) {
   return _.map(config.banks, function (bank) {
     var vendorOpts = _.find(bankOpts, function (bankConf) {
       return bankConf.id == bank.id;
     });
 
     if (vendorOpts) {
-      return _.extend({}, bank, vendorOpts)
+      return _.extend({}, bank, vendorOpts);
     } else {
-      return bank
+      return bank;
     }
   });
 }
 
-function bindReturnUrlsToHandler (tupas, handler, contextPath) {
+function bindReturnUrlsToHandler(tupas, handler, contextPath) {
   handler.post(contextPath + okPath, ok(tupas)); // Danske Bank uses POST.
   handler.post(contextPath + cancelPath, cancel(tupas));
   handler.post(contextPath + rejectPath, reject(tupas));
@@ -131,15 +131,15 @@ function bindReturnUrlsToHandler (tupas, handler, contextPath) {
   handler.get(contextPath + rejectPath, reject(tupas));
 }
 
-function buildParamsForRequest (bank, languageCode, returnUrls, requestId) {
+function buildParamsForRequest(bank, languageCode, returnUrls, requestId) {
   if (invalidLangCode(languageCode))
-    throw new Error("Unsupported language code: " + languageCode + ".");
+    throw new Error('Unsupported language code: ' + languageCode + '.');
   if (requestId.length > 20)
-    throw new Error("Request id too long: " + requestId + ".");
+    throw new Error('Request id too long: ' + requestId + '.');
 
   var params = {
-    name : bank.name,
-    id : bank.id,
+    name: bank.name,
+    id: bank.id,
     bankAuthUrl: bank.authUrl,
     messageType: TUPAS_MESSAGE_TYPE,
     version: bank.version,
@@ -153,7 +153,7 @@ function buildParamsForRequest (bank, languageCode, returnUrls, requestId) {
     keyVersion: bank.keyVersion,
     algorithmType: SHA256,
     checksumKey: bank.checksumKey,
-    imgPath : bank.imgPath
+    imgPath: bank.imgPath
   };
 
   params.mac = generateMacForRequest (params);
@@ -165,13 +165,13 @@ function invalidLangCode(langCode) {
   return !_.contains(LANG_CODES, langCode);
 }
 
-function findConfig (bankId, bankConfig) {
+function findConfig(bankId, bankConfig) {
   return _.find(bankConfig, function (bank) {
     return bank.id == bankId;
   });
 }
 
-function generateMacForRequest (requestParams) {
+function generateMacForRequest(requestParams) {
   var macParams = [
     requestParams.messageType,
     requestParams.version,
@@ -190,7 +190,7 @@ function generateMacForRequest (requestParams) {
   return generateMac(macParams);
 }
 
-function generateMacForResponse (queryParams, bankConfig) {
+function generateMacForResponse(queryParams, bankConfig) {
   var bankNumber = queryParams.B02K_TIMESTMP.substr(0, 3);
   var bank = _.find(bankConfig, function (bank) {
     return bank.number == bankNumber;
@@ -217,28 +217,28 @@ function generateMacForResponse (queryParams, bankConfig) {
 }
 
 function generateMac(params) {
-  var joinedParams = params.join("&") + "&";
+  var joinedParams = params.join('&') + '&';
   return crypto.createHash('sha256').update(joinedParams, 'binary').digest('hex').toUpperCase();
 }
 
-function ok (tupas) {
+function ok(tupas) {
   return function (req, res) {
     if (req.query.B02K_MAC && req.query.B02K_MAC.toUpperCase() === tupas.responseMac(req.query)) {
       tupas.emit('success', req, res);
     } else {
       tupas.emit('mac-check-failed', req, res);
     }
-  }
+  };
 }
 
-function cancel (tupas) {
+function cancel(tupas) {
   return function (req, res) {
     tupas.emit('cancel', req, res);
-  }
+  };
 }
 
-function reject (tupas) {
+function reject(tupas) {
   return function (req, res) {
     tupas.emit('reject', req, res);
-  }
+  };
 }
