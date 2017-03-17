@@ -1,6 +1,6 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
-  var config = require("./config.json");
+  var config = require('./config.json');
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -8,20 +8,20 @@ module.exports = function(grunt) {
     express: {
       options: {
         port: config.port,
-        server : 'sample/app.js',
-        hostname : "localhost"
+        server: 'sample/app.js',
+        hostname: 'localhost'
       }
     },
 
     casperjs: {
-        options: {
-          async: {
-            parallel: false
-          },
-          casperjsOptions: ['--ignore-ssl-errors=true']
-
+      options: {
+        async: {
+          parallel: false
         },
-        files: ['tests/*.js']
+        casperjsOptions: ['--ignore-ssl-errors=true']
+
+      },
+      files: ['tests/*.js']
     },
     mochaTest: {
       test: {

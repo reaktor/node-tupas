@@ -1,57 +1,58 @@
+/* global casper */
 var config = require('../config.json');
 
 casper.options.waitTimeout = 10000;
 
-casper.test.begin('Oma Saastopankki Authentication', 1, function(test) {
+casper.test.begin('Oma Saastopankki Authentication', 1, function (test) {
   var loginForm = 'form[name="LoginForm"]';
   var verificationForm = 'form[name="SecurityKeyForm"]';
 
-  casper.start('https://localhost:' + config.port, function() {
+  casper.start('https://localhost:' + config.port, function () {
     this.click('#omasaastopankki-login');
   });
 
-  casper.waitForSelector(loginForm, function() {
+  casper.waitForSelector(loginForm, function () {
     this.fill(loginForm, {
-      "USERNAME" : "11111111",
-      "PASSWORD" : "123456"
+      'USERNAME': '11111111',
+      'PASSWORD': '123456'
     }, true);
   });
 
-  casper.waitForSelector(verificationForm, function() {
+  casper.waitForSelector(verificationForm, function () {
     this.fill(verificationForm, {
-      "SECURITYKEY" : '123456'
+      'SECURITYKEY': '123456'
     }, true);
   });
 
-  casper.then(function() {
+  casper.then(function () {
     this.click('button[type="button"]');
   });
 
-  casper.waitForSelector('#success', function() {
-    test.assertExists("#success");
-    this.echo("Succesfully authenticated with Omasaastopankki");
+  casper.waitForSelector('#success', function () {
+    test.assertExists('#success');
+    this.echo('Succesfully authenticated with Omasaastopankki');
   });
 
-  casper.run(function() {
+  casper.run(function () {
     test.done();
   });
 });
 
-casper.test.begin("Test auth cancelation", 1, function(test) {
-  casper.start('https://localhost:' + config.port, function() {
-    this.click("#omasaastopankki-login");
+casper.test.begin('Test auth cancelation', 1, function (test) {
+  casper.start('https://localhost:' + config.port, function () {
+    this.click('#omasaastopankki-login');
   });
 
-  casper.then(function() {
+  casper.then(function () {
     this.click('button[type="button"]');
   });
 
-  casper.waitForSelector('#cancel', function() {
-    test.assertExists("#cancel");
-    this.echo("Succesfully canceled authentication");
+  casper.waitForSelector('#cancel', function () {
+    test.assertExists('#cancel');
+    this.echo('Succesfully canceled authentication');
   });
 
-  casper.run(function() {
+  casper.run(function () {
     test.done();
   });
 });

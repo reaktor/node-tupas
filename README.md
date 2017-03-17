@@ -43,21 +43,21 @@ var tupas = require('tupas').create(generalOptions);
 ```javascript
 var bankOptions = [
   {
-    id : 'nordea',
-    imgPath : '/path/to/my/image.png',
-    vendorId : 'production id',
-    checksumKey : 'production key'
+    id: 'nordea',
+    imgPath: '/path/to/my/image.png',
+    vendorId: 'production id',
+    checksumKey: 'production key'
   },
   {
-    id : 'my-new-bank',
-    authUrl : "https://my.banks.url.com/tupas",
-    version : "0002",
-    keyVersion : "0001",
-    idType : "01",
-    imgPath : "/path/to/my/image.png",
-    number : "420",
-    vendorId : "xxxxxxx",
-    checksumKey : "xxxxxxx"
+    id: 'my-new-bank',
+    authUrl: "https://my.banks.url.com/tupas",
+    version: "0002",
+    keyVersion: "0001",
+    idType: "01",
+    imgPath: "/path/to/my/image.png",
+    number: "420",
+    vendorId: "xxxxxxx",
+    checksumKey: "xxxxxxx"
   }
 ];
 
@@ -94,7 +94,7 @@ var params = tupas.buildRequestParams('nordea', 'FI', requestId);
 ```javascript
 var banks = tupas.banks
 // => ['danskebank', 'handelsbanken', 'nordea',
-//     'op', 'aktia', 'alandsbanken', 'spankki', 
+//     'op', 'aktia', 'alandsbanken', 'spankki',
 //     'saastopankki', 'poppankki', 'my-new-bank']
 ```
 
