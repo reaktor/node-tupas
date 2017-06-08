@@ -1,6 +1,6 @@
 {
   "name": "tupas",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "A module for TUPAS identification.",
   "main": "tupas.js",
   "homepage": "https://github.com/reaktor/node-tupas",
