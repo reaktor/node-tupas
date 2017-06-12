@@ -8,6 +8,8 @@ var express = require('express')
   , moment = require('moment')
   , config = require('../config.json');
 
+var requestIdCounter = 0;
+
 var globalOpts = {
   appHandler: app,
   hostUrl: 'https://localhost:' + config.port
@@ -44,7 +46,9 @@ app.use(express.static(__dirname + '/css'));
 
 app.get('/', function (req, res) {
   var now = moment().format('YYYYMMDDhhmmss');
-  var requestId = now + '123456';
+  requestIdCounter++;
+  // Developer should implement requestId so that it's unique.
+  var requestId = now + (requestIdCounter % 100000).toString();
 
   var bankForms = _.map(tupas.banks, function (bankId) {
     return tupas.tupasButton(bankId, 'FI', requestId);
