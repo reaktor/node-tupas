@@ -17,24 +17,24 @@ var SHA256 = '03',
   LANG_CODES = ['FI', 'SV', 'EN'];
 
 var tupasFormTemplate = _.template(
-                         '<form id="<%= id %>-form" method="POST" action="<%= bankAuthUrl %>" class="tupas-button">'+
-                         '<button type="submit" id="<%= id %>-login">' +
-                         '<div class="bank-login-image"><img src="<%= imgPath %>" alt=""></div>' +
-                         '<div class="bank-login-name"><%= name %></div>' +
-                         '</button>' +
-                         '<input name="A01Y_ACTION_ID" type="hidden" value="<%= messageType %>">' +
-                         '<input name="A01Y_VERS" type="hidden" value="<%= version %>">' +
-                         '<input name="A01Y_RCVID" type="hidden" value="<%= vendorId %>">' +
-                         '<input name="A01Y_LANGCODE" type="hidden" value="<%= languageCode %>">' +
-                         '<input name="A01Y_STAMP" type="hidden" value="<%= identifier %>">' +
-                         '<input name="A01Y_IDTYPE" type="hidden" value="<%= idType %>">' +
-                         '<input name="A01Y_RETLINK" type="hidden" value="<%= returnLink %>">' +
-                         '<input name="A01Y_CANLINK" type="hidden" value="<%= cancelLink %>">' +
-                         '<input name="A01Y_REJLINK" type="hidden" value="<%= rejectLink %>">' +
-                         '<input name="A01Y_KEYVERS" type="hidden" value="<%= keyVersion %>">' +
-                         '<input name="A01Y_ALG" type="hidden" value="<%= algorithmType %>">' +
-                         '<input name="A01Y_MAC" type="hidden" value="<%= mac %>">' +
-                         '</form>');
+  '<form id="<%= id %>-form" method="POST" action="<%= bankAuthUrl %>" class="tupas-button">'+
+    '<button type="submit" id="<%= id %>-login">' +
+      '<div class="bank-login-image"><img src="<%= imgPath %>" alt=""></div>' +
+      '<div class="bank-login-name"><%= name %></div>' +
+    '</button>' +
+    '<input name="A01Y_ACTION_ID" type="hidden" value="<%= messageType %>">' +
+    '<input name="A01Y_VERS" type="hidden" value="<%= version %>">' +
+    '<input name="A01Y_RCVID" type="hidden" value="<%= vendorId %>">' +
+    '<input name="A01Y_LANGCODE" type="hidden" value="<%= languageCode %>">' +
+    '<input name="A01Y_STAMP" type="hidden" value="<%= identifier %>">' +
+    '<input name="A01Y_IDTYPE" type="hidden" value="<%= idType %>">' +
+    '<input name="A01Y_RETLINK" type="hidden" value="<%= returnLink %>">' +
+    '<input name="A01Y_CANLINK" type="hidden" value="<%= cancelLink %>">' +
+    '<input name="A01Y_REJLINK" type="hidden" value="<%= rejectLink %>">' +
+    '<input name="A01Y_KEYVERS" type="hidden" value="<%= keyVersion %>">' +
+    '<input name="A01Y_ALG" type="hidden" value="<%= algorithmType %>">' +
+    '<input name="A01Y_MAC" type="hidden" value="<%= mac %>">' +
+  '</form>');
 
 // An Express-like app is fine, but only post() and get() are used from it.
 function isValidAppHandler(handler) {
@@ -54,8 +54,8 @@ function isValidLangCode(langCode) {
 }
 
 exports.create = function (globalOpts, bankOpts) {
-  assert(_.isString(globalOpts.hostUrl), "globalOpts.hostUrl must be a valid URL");
-  assert(url.parse(globalOpts.hostUrl).protocol === "https:", "globalOpts.hostUrl must use https protocol");
+  assert(_.isString(globalOpts.hostUrl), 'globalOpts.hostUrl must be a valid URL');
+  assert(url.parse(globalOpts.hostUrl).protocol === 'https:', 'globalOpts.hostUrl must use https protocol');
 
 
   var tupas = Object.create(events.EventEmitter.prototype),
@@ -73,7 +73,7 @@ exports.create = function (globalOpts, bankOpts) {
   };
 
   tupas.bindHandlers = function (appHandler) {
-    assert(isValidAppHandler(appHandler), "appHandler must be valid");
+    assert(isValidAppHandler(appHandler), 'appHandler must be valid');
 
     var contextPath = url.parse(globalOpts.hostUrl).pathname;
     if (contextPath === '/') contextPath = '';
@@ -134,12 +134,12 @@ function bindReturnUrlsToHandler(tupas, handler, contextPath) {
   handler.post(contextPath + okPath, ok(tupas)); // Danske Bank uses POST.
   handler.post(contextPath + cancelPath, cancel(tupas));
   handler.post(contextPath + rejectPath, reject(tupas));
-  handler.get(contextPath + okPath, ok(tupas));  // Others use GET.
+  handler.get(contextPath + okPath, ok(tupas)); // Others use GET.
   handler.get(contextPath + cancelPath, cancel(tupas));
   handler.get(contextPath + rejectPath, reject(tupas));
 }
 
-function buildParamsForRequest (bank, languageCode, returnUrls, requestId) {
+function buildParamsForRequest(bank, languageCode, returnUrls, requestId) {
   assert(!_.isEmpty(bank), 'Invalid bank given');
   assert(isValidRequestId(requestId), 'Invalid requestId, it must be (max) 20 chars long.');
   assert(isValidLangCode(languageCode), 'Unsupported language code: ' + languageCode + '.');
@@ -168,7 +168,7 @@ function buildParamsForRequest (bank, languageCode, returnUrls, requestId) {
   return params;
 }
 
-function findConfig (bankId, bankConfig) {
+function findConfig(bankId, bankConfig) {
   return _.find(bankConfig, function (bank) {
     return bank.id == bankId;
   });

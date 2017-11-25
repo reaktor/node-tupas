@@ -1,4 +1,7 @@
 {
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
   "env": {
     "node": true
   },
@@ -33,6 +36,7 @@
     "space-before-function-paren": ["error", {
       "anonymous": "always",
       "named": "never"
-    }]
+    }],
+    "no-console": 0
   }
 }

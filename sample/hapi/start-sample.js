@@ -1,6 +1,5 @@
 const fs = require('fs');
 const hapi = require('hapi');
-const path = require('path');
 
 const config = require('../../config');
 
@@ -13,21 +12,21 @@ const tls = {
 };
 
 server.connection({
-    host: 'localhost',
-    port: config.port,
-    tls,
+  host: 'localhost',
+  port: config.port,
+  tls,
 });
 
 server.register([
-    require('inert'),
-    require('./tupas-plugin')
+  require('inert'),
+  require('./tupas-plugin')
 ])
-    .then(() => {
-        return server.start();
-    })
-    .then(() => {
-        console.log('Server running at:', server.info.uri);
-    })
-    .catch((err) => {
-        console.error('Error', err);
-    });
+  .then(() => {
+    return server.start();
+  })
+  .then(() => {
+    console.log('Server running at:', server.info.uri);
+  })
+  .catch((err) => {
+    console.error('Error', err);
+  });

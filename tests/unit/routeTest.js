@@ -8,7 +8,7 @@ var app = express();
 
 var globalOpts = {
   appHandler: app,
-  hostUrl: "https://localhost:3000"
+  hostUrl: 'https://localhost:3000'
 };
 
 var tupas = require(__dirname + '/../../tupas').create(globalOpts);
@@ -21,8 +21,8 @@ tupas.on('mac-check-failed', function (req, res) {
   res.status(400).send('mac-check-failed');
 });
 
-describe('POST tupas/ok', function(){
-  it('to handle invalid post parameters and trigger mac-check-failed', function(done){
+describe('POST tupas/ok', function () {
+  it('to handle invalid post parameters and trigger mac-check-failed', function (done) {
     request(app)
       .post('/tupas/ok')
       .expect(400)
