@@ -8,7 +8,7 @@ module.exports = function (grunt) {
     express: {
       options: {
         port: config.port,
-        server: 'sample/app.js',
+        server: 'sample/express/app.js',
         hostname: 'localhost'
       }
     },

@@ -6,7 +6,7 @@ var express = require('express')
   , app = express()
   , _ = require('underscore')._
   , moment = require('moment')
-  , config = require('../config.json');
+  , config = require('../../config.json');
 
 var requestIdCounter = 0;
 
@@ -15,7 +15,7 @@ var globalOpts = {
   hostUrl: 'https://localhost:' + config.port
 };
 
-var tupas = require(__dirname + '/../tupas').create(globalOpts);
+var tupas = require(__dirname + '/../../tupas').create(globalOpts);
 
 tupas.on('success', function (req, res) {
   console.log(req.query);
@@ -42,9 +42,15 @@ var sslOptions = {
   rejectUnauthorized: false
 };
 
-app.use(express.static(__dirname + '/css'));
+app.use(express.static(__dirname + '/../css'));
+
+// When using this tupas package normally, this would be something like
+// app.use(express.static(__dirname + '/node_modules/tupas/public'));
+app.use(express.static(__dirname + '/../../public'));
 
 app.get('/', function (req, res) {
+  // requestId length should be 20 as per TUPAS spec, but seems that
+  // shorter ones are accepted.
   var now = moment().format('YYYYMMDDhhmmss');
   requestIdCounter++;
   // Developer should implement requestId so that it's unique.

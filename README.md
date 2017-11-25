@@ -5,7 +5,8 @@ Configurable Node.js module for TUPAS identification. Includes test
 configurations for Nordea, DanskeBank, Handelsbanken, OP,
 Aktia, Ålandsbanken, S-Pankki, Säästöpankki and POP Pankki.
 
-Currently requires Express.
+Can be used as a complete solution (server & client) or client-side only
+(for form rendering).
 
 ## About
 
@@ -31,11 +32,46 @@ Run tests with grunt.
 
 ```javascript
 var generalOptions = {
-  appHandler: app, // an Express application
-  hostUrl: 'http://domain.here.com:port[/path]', // required for return URLs, and binding to optional /path
+  hostUrl: 'https://domain.here.com:port[/path]', // required for return URLs, and binding to optional /path
+  appHandler: app // optional, equals to calling tupas.bindHandlers() separately
 };
 
 var tupas = require('tupas').create(generalOptions);
+
+// Bind the tupas internal events and routes to the given 'app', where 'app' is
+// an Express-like application. This is only needed when used on server-side.
+// Client-side operations, such as form rendering, are available without
+// this.
+// Don't do this if you gave 'app' to create() in generalOptions!
+tupas.bindHandlers(app);
+```
+
+`appHandler` must be an Express-like application object. For the purposes of this package,
+it is enough for it to have `post(path, handler)` and `get(path, handler)` functions.
+Each `handler` function will be called with `request` and `response` objects. The only property used from
+these is `request.query`, which should match the [implementation of Express](http://expressjs.com/en/api.html#req.query)
+(contain request query parameters as an object).
+
+The `request` and `response` objects will be given back to the client application's event
+handlers intact (see below).
+
+An imaginary customized `appHandler` implementation:
+
+```javascript
+var appHandler = {
+    post: function(path, handler) {
+        myServer.registerHandler('POST', path, function(request, reply) {
+            // Parsing query params our own way. It's highly likely that,
+            // if using a popular framework, you're given this automatically.
+            var queryParams = myServer.parseQueryParams(request);
+
+            handler({ query: queryParams }, reply);
+        });
+    },
+    get: function(path, handler) {
+        myServer.registerHandler('GET', path, handler);
+    }
+}
 ```
 
 ### Change configurations for existing banks or add new ones
@@ -101,7 +137,7 @@ var banks = tupas.banks
 ### Response handling
 
 The module binds paths `/tupas/ok` (GET and POST), `/tupas/cancel` (only GET)
-and `/tupas/reject` (only GET) to the given Express app for use as return urls.
+and `/tupas/reject` (only GET) to the given application handler for use as return urls.
 
 Response handling is event based.
 ```javascript
@@ -122,7 +158,18 @@ tupas.on('reject', function (request, response) {
 });
 ```
 
-### Sample application
+### Sample applications
 
-See `sample/app.js` for a simple usage example. Run the
-sample app locally with `node sample/start-sample.js`.
+Examples of host applications are provided:
+
+- See `sample/express/app.js` for a simple usage example with [Express](http://expressjs.com). Run the
+sample app locally with `node sample/express/start-sample.js`.
+- See `sample/hapi/tupas-plugin.js` for a simple usage example with [Hapi](http://hapijs.com). Run the sample app
+locally with `node sample/hapi/start-sample.js`.
+
+## Resources
+
+More information about TUPAS:
+
+- "Tupas Identification Service" at FFI http://www.finanssiala.fi/en/payment-services/Pages/Technical-documentation.aspx
+- "Finnish Tupas" at Signicat Support https://support.signicat.com/display/S2/Finnish+Tupas

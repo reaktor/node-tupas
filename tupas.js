@@ -1,10 +1,10 @@
 'use strict';
 /*jslint node:true, indent: 2, nomen: true */
-var crypto = require('crypto'),
+var assert = require('assert'),
+  crypto = require('crypto'),
   url = require('url'),
   events = require('events'),
   _ = require('underscore')._,
-  express = require('express'),
   config = require('./config.json');
 
 var tupasPath = '/tupas',
@@ -18,10 +18,10 @@ var SHA256 = '03',
 
 var tupasFormTemplate = _.template(
                          '<form id="<%= id %>-form" method="POST" action="<%= bankAuthUrl %>" class="tupas-button">'+
-                         '<div id="<%= id %>-login" style="cursor: pointer">' +
-                         '<div class="bank-login-image"><img src="<%= imgPath %>" alt="<%= name %>"></div>' +
-                         '<div class="bank-login-name"><a href="#"><%= name %></a></div>' +
-                         '</div>' +
+                         '<button type="submit" id="<%= id %>-login">' +
+                         '<div class="bank-login-image"><img src="<%= imgPath %>" alt=""></div>' +
+                         '<div class="bank-login-name"><%= name %></div>' +
+                         '</button>' +
                          '<input name="A01Y_ACTION_ID" type="hidden" value="<%= messageType %>">' +
                          '<input name="A01Y_VERS" type="hidden" value="<%= version %>">' +
                          '<input name="A01Y_RCVID" type="hidden" value="<%= vendorId %>">' +
@@ -34,31 +34,29 @@ var tupasFormTemplate = _.template(
                          '<input name="A01Y_KEYVERS" type="hidden" value="<%= keyVersion %>">' +
                          '<input name="A01Y_ALG" type="hidden" value="<%= algorithmType %>">' +
                          '<input name="A01Y_MAC" type="hidden" value="<%= mac %>">' +
-                         '<script>' +
-                         'var bankLogin = document.getElementById("<%= id %>-login");' +
-                         'var clickHandler = function() {' +
-                            'document.getElementById("<%= id %>-form").submit();' +
-                          '};' +
-                         'if(bankLogin.addEventListener) {' +
-                           'bankLogin.addEventListener("click", clickHandler, false);' +
-                          '}'+
-                         'else if (bankLogin.attachEvent) {' +
-                           'bankLogin.attachEvent("onclick", clickHandler);' +
-                         '}' +
-                         '</script>' +
                          '</form>');
 
-function requireArgument(argValue, argName) {
-  if (typeof argValue === 'undefined' || argValue === null) {
-    throw new Error('Missing required argument ' + argName + '.');
-  }
+// An Express-like app is fine, but only post() and get() are used from it.
+function isValidAppHandler(handler) {
+  return _.isObject(handler) && _.every([handler.post, handler.get], _.isFunction);
+}
+
+// The TUPAS spec gives the impression that the length must be exactly 20 chars, but
+// it seems that in practice this can be considered as the max length, shorter ones are
+// allowed as well (not sure how well one can rely on this, though). Allowed characters
+// are not defined by the spec, so not being too strict here either.
+function isValidRequestId(id) {
+  return _.isString(id) && id.length <= 20;
+}
+
+function isValidLangCode(langCode) {
+  return _.contains(LANG_CODES, langCode);
 }
 
 exports.create = function (globalOpts, bankOpts) {
-  requireArgument(globalOpts.appHandler, 'globalOpts.appHandler');
-  requireArgument(globalOpts.hostUrl, 'globalOpts.hostUrl');
-  var contextPath = url.parse(globalOpts.hostUrl).pathname;
-  if (contextPath === '/') contextPath = '';
+  assert(_.isString(globalOpts.hostUrl), "globalOpts.hostUrl must be a valid URL");
+  assert(url.parse(globalOpts.hostUrl).protocol === "https:", "globalOpts.hostUrl must use https protocol");
+
 
   var tupas = Object.create(events.EventEmitter.prototype),
     banks = updatedBankConfigsWith(bankOpts),
@@ -68,13 +66,19 @@ exports.create = function (globalOpts, bankOpts) {
       { returnUrls: returnUrls(globalOpts.hostUrl) }
     );
 
-  bindReturnUrlsToHandler(tupas, vendorOpts.appHandler, contextPath);
-  vendorOpts.appHandler.use(express.static(__dirname + '/public'));
-
   tupas.banks = _.pluck(banks, 'id');
   tupas.requestMac = generateMacForRequest;
   tupas.responseMac = function (params) {
     return generateMacForResponse(params, banks);
+  };
+
+  tupas.bindHandlers = function (appHandler) {
+    assert(isValidAppHandler(appHandler), "appHandler must be valid");
+
+    var contextPath = url.parse(globalOpts.hostUrl).pathname;
+    if (contextPath === '/') contextPath = '';
+
+    bindReturnUrlsToHandler(tupas, appHandler, contextPath);
   };
 
   tupas.buildRequestParams = function (bankId, languageCode, requestId) {
@@ -86,6 +90,10 @@ exports.create = function (globalOpts, bankOpts) {
     var formParams = tupas.buildRequestParams(bankId, languageCode, requestId);
     return tupasFormTemplate(formParams);
   };
+
+  if (globalOpts.appHandler) {
+    tupas.bindHandlers(globalOpts.appHandler);
+  }
 
   return tupas;
 };
@@ -131,11 +139,10 @@ function bindReturnUrlsToHandler(tupas, handler, contextPath) {
   handler.get(contextPath + rejectPath, reject(tupas));
 }
 
-function buildParamsForRequest(bank, languageCode, returnUrls, requestId) {
-  if (invalidLangCode(languageCode))
-    throw new Error('Unsupported language code: ' + languageCode + '.');
-  if (requestId.length > 20)
-    throw new Error('Request id too long: ' + requestId + '.');
+function buildParamsForRequest (bank, languageCode, returnUrls, requestId) {
+  assert(!_.isEmpty(bank), 'Invalid bank given');
+  assert(isValidRequestId(requestId), 'Invalid requestId, it must be (max) 20 chars long.');
+  assert(isValidLangCode(languageCode), 'Unsupported language code: ' + languageCode + '.');
 
   var params = {
     name: bank.name,
@@ -161,11 +168,7 @@ function buildParamsForRequest(bank, languageCode, returnUrls, requestId) {
   return params;
 }
 
-function invalidLangCode(langCode) {
-  return !_.contains(LANG_CODES, langCode);
-}
-
-function findConfig(bankId, bankConfig) {
+function findConfig (bankId, bankConfig) {
   return _.find(bankConfig, function (bank) {
     return bank.id == bankId;
   });

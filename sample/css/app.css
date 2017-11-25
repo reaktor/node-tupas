@@ -21,3 +21,14 @@
   float: left;
   padding: 0.8em;
 }
+
+.tupas-button button {
+  padding: 0.5em;
+  background-color: transparent;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.tupas-button button:hover {
+  border-color: #666;
+}
