@@ -4,6 +4,9 @@
   "description": "A module for TUPAS identification.",
   "main": "tupas.js",
   "homepage": "https://github.com/reaktor/node-tupas",
+  "engines": {
+    "node": ">=8.0"
+  },
   "author": {
     "name": "Reaktor",
     "url": "http://www.reaktor.fi"
@@ -14,7 +17,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "express": "4.15.3",
+    "express": "4.16.2",
     "underscore": "1.8.3"
   },
   "devDependencies": {
@@ -24,7 +27,7 @@
     "grunt-express": "1.4.0",
     "grunt-mocha-test": "0.12.7",
     "mocha": "2.3.4",
-    "moment": "2.10.6",
+    "moment": "2.19.2",
     "supertest": "1.1.0"
   },
   "scripts": {
