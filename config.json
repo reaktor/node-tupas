@@ -16,7 +16,7 @@
     {
       "id": "handelsbanken",
       "name": "Handelsbanken",
-      "authUrl": "https://tunnistepalvelu.samlink.fi/TupasTunnistus/SHBtupas.html",
+      "authUrl": "https://tupas.handelsbanken.fi",
       "version": "0002",
       "keyVersion": "0001",
       "idType": "02",
